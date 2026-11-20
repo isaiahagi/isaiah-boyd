@@ -251,33 +251,35 @@
     else toggle.addEventListener("click", () => { const p = sky.toggle(); toggle.textContent = p ? "play sky" : "pause sky"; toggle.setAttribute("aria-pressed", String(p)); });
   }
 
-  // Time in Palm Coast (Eastern) and live weather from Open-Meteo (no key, no personal data sent)
+  // Time in Palm Coast (Eastern), sunrise/sunset computed locally, and live conditions from the
+  // National Weather Service (api.weather.gov: free, official, no key). Refreshed every 15 minutes.
+  const LAT = 29.585, LON = -81.207;
   const clock = $("#clock"), wx = $("#wx"), wxDot = $("#wx-dot");
   const tf = new Intl.DateTimeFormat("en-US", { timeZone: NY, hour: "numeric", minute: "2-digit" });
   const hf = new Intl.DateTimeFormat("en-US", { timeZone: NY, hour: "numeric", minute: "numeric", hourCycle: "h23" });
-  const minsNow = () => { const p = hf.formatToParts(new Date()); return +p.find((x) => x.type === "hour").value * 60 + +p.find((x) => x.type === "minute").value; };
-  const toMins = (s) => (s ? +s.slice(11, 13) * 60 + +s.slice(14, 16) : null);
-  const WX = (c) => {
-    if (c === 0) return ["clear", { cover: 0.05 }];
-    if (c === 1) return ["mostly clear", { cover: 0.18 }];
-    if (c === 2) return ["partly cloudy", { cover: 0.45 }];
-    if (c === 3) return ["overcast", { cover: 0.85 }];
-    if (c === 45 || c === 48) return ["foggy", { cover: 0.6, fog: 0.5 }];
-    if (c >= 51 && c <= 57) return ["drizzle", { cover: 0.8, rain: 0.1 }];
-    if (c === 61) return ["light rain", { cover: 0.8, rain: 0.16 }];
-    if (c === 63 || c === 66 || c === 67) return ["rain", { cover: 0.85, rain: 0.24 }];
-    if (c === 65) return ["heavy rain", { cover: 0.9, rain: 0.34 }];
-    if (c >= 71 && c <= 77) return ["snow", { cover: 0.8, snow: 0.2 }];
-    if (c === 80) return ["light showers", { cover: 0.75, rain: 0.18 }];
-    if (c === 81) return ["showers", { cover: 0.85, rain: 0.26 }];
-    if (c === 82) return ["heavy showers", { cover: 0.9, rain: 0.36 }];
-    if (c === 85 || c === 86) return ["snow showers", { cover: 0.8, snow: 0.22 }];
-    if (c >= 95) return ["thunderstorm", { cover: 0.92, rain: 0.3, thunder: true }];
-    return ["", { cover: 0.3 }];
+  const nyMins = (d) => { const p = hf.formatToParts(d); return +p.find((x) => x.type === "hour").value * 60 + +p.find((x) => x.type === "minute").value; };
+  const minsNow = () => nyMins(new Date());
+
+  // NOAA sunrise equation (accurate to about a minute)
+  const sunTimes = () => {
+    const rad = Math.PI / 180, sin = (x) => Math.sin(x * rad);
+    const jd = Date.now() / 864e5 + 2440587.5;
+    const n = Math.ceil(jd - (2451545.0 + 0.0009) + 69.184 / 86400);
+    const Js = n + 0.0009 - LON / 360; // LON is negative for west longitudes
+    const M = (357.5291 + 0.98560028 * Js) % 360;
+    const C = 1.9148 * sin(M) + 0.02 * sin(2 * M) + 0.0003 * sin(3 * M);
+    const lam = (M + C + 180 + 102.9372) % 360;
+    const Jt = 2451545.0 + Js + 0.0053 * sin(M) - 0.0069 * sin(2 * lam);
+    const dec = Math.asin(sin(lam) * sin(23.4397));
+    const cosw = (sin(-0.833) - sin(LAT) * Math.sin(dec)) / (Math.cos(LAT * rad) * Math.cos(dec));
+    if (!isFinite(cosw) || Math.abs(cosw) > 1) return null;
+    const w = Math.acos(cosw) / rad;
+    const toDate = (j) => new Date((j - 2440587.5) * 864e5);
+    return { sr: nyMins(toDate(Jt - w / 360)), ss: nyMins(toDate(Jt + w / 360)) };
   };
-  const wxState = { sr: 7 * 60, ss: 18 * 60 + 30, temp: null, desc: "", fx: { cover: 0.2, rain: 0, snow: 0, fog: 0, thunder: false } };
+  let sun = sunTimes() || { sr: 7 * 60, ss: 18 * 60 + 30 };
   const phaseNow = () => {
-    const m = minsNow(), { sr, ss } = wxState;
+    const m = minsNow(), { sr, ss } = sun;
     if (m >= sr - 45 && m <= sr + 40) return "dusk";
     if (m > sr + 40 && m < ss - 60) return "day";
     if (m >= ss - 60 && m <= ss + 45) return "dusk";
@@ -285,25 +287,83 @@
   };
   const tick = () => {
     if (clock) clock.textContent = tf.format(new Date()).toLowerCase();
+    sun = sunTimes() || sun;
     const ph = phaseNow();
     if (ph !== sky.phase()) sky.set({ phase: ph });
   };
   tick(); setInterval(tick, 20000);
   sky.set({ phase: phaseNow() });
 
-  (async () => {
+  // NWS text ("Light Rain and Fog/Mist", "Mostly Cloudy", ...) -> sky effects
+  const fxFrom = (text) => {
+    const t = (text || "").toLowerCase();
+    const heavy = /heavy/.test(t), light = /light/.test(t);
+    if (/thunder|t-storm/.test(t)) return { cover: 0.92, rain: 0.3, thunder: true };
+    if (/snow|flurr|blizzard/.test(t)) return { cover: 0.8, snow: heavy || /blizzard/.test(t) ? 0.3 : 0.2 };
+    if (/sleet|freezing|ice pellets|wintry/.test(t)) return { cover: 0.85, rain: 0.2 };
+    if (/drizzle/.test(t)) return { cover: 0.8, rain: 0.1 };
+    if (/rain|shower/.test(t)) return { cover: 0.85, rain: heavy ? 0.34 : light ? 0.16 : 0.24 };
+    if (/fog|mist/.test(t)) return { cover: 0.6, fog: 0.5 };
+    if (/haze|smoke|dust/.test(t)) return { cover: 0.35, fog: 0.25 };
+    if (/overcast/.test(t)) return { cover: 0.85 };
+    if (/mostly cloudy|considerable/.test(t)) return { cover: 0.7 };
+    if (/partly|scattered/.test(t)) return { cover: 0.45 };
+    if (/mostly clear|mostly sunny|fair|few clouds|a few/.test(t)) return { cover: 0.18 };
+    if (/clear|sunny/.test(t)) return { cover: 0.05 };
+    if (/cloud/.test(t)) return { cover: 0.8 };
+    return { cover: 0.3 };
+  };
+  const NWS = "https://api.weather.gov";
+  const nwsGet = async (url) => { const r = await fetch(url, { headers: { Accept: "application/geo+json" } }); if (!r.ok) throw new Error(String(r.status)); return r.json(); };
+  let nwsInfo = null;
+  const getInfo = async () => {
+    if (nwsInfo) return nwsInfo;
+    const c = store.get("nws:info");
+    if (c) { try { nwsInfo = JSON.parse(c); if (nwsInfo.st && nwsInfo.st.length) return nwsInfo; } catch { /* refetch */ } }
+    const pt = (await nwsGet(`${NWS}/points/${LAT},${LON}`)).properties;
+    const list = await nwsGet(pt.observationStations);
+    nwsInfo = { st: list.features.slice(0, 4).map((f) => f.properties.stationIdentifier), hourly: pt.forecastHourly };
+    store.set("nws:info", JSON.stringify(nwsInfo));
+    return nwsInfo;
+  };
+  // Nearest station with a fresh temperature reading wins (Flagler County Airport is usually first)
+  const latestObs = async (ids) => {
+    for (const id of ids) {
+      try {
+        const pr = (await nwsGet(`${NWS}/stations/${id}/observations/latest`)).properties;
+        const c = pr.temperature && pr.temperature.value;
+        if (c != null && Date.now() - new Date(pr.timestamp).getTime() < 3 * 3600e3) return { f: c * 9 / 5 + 32, text: pr.textDescription || "" };
+      } catch { /* try the next station */ }
+    }
+    return null;
+  };
+  const hourlyNow = async (url) => {
+    const p = (await nwsGet(url)).properties.periods[0];
+    return { f: p.temperatureUnit === "C" ? p.temperature * 9 / 5 + 32 : p.temperature, text: p.shortForecast || "" };
+  };
+  let lastWx = 0, wxBusy = false;
+  const loadWeather = async () => {
+    if (wxBusy) return;
+    wxBusy = true;
     try {
-      const url = "https://api.open-meteo.com/v1/forecast?latitude=29.585&longitude=-81.207&current=temperature_2m,weather_code&daily=sunrise,sunset&temperature_unit=fahrenheit&timezone=America%2FNew_York&forecast_days=1";
-      let d; const c = store.get("wx");
-      if (c) { const o = JSON.parse(c); if (Date.now() - o.t < 900000) d = o.d; }
-      if (!d) { const r = await fetch(url); if (!r.ok) throw new Error(r.status); d = await r.json(); store.set("wx", JSON.stringify({ t: Date.now(), d })); }
-      wxState.sr = toMins(d.daily.sunrise[0]) ?? wxState.sr; wxState.ss = toMins(d.daily.sunset[0]) ?? wxState.ss;
-      const [desc, fx] = WX(d.current.weather_code);
-      wxState.temp = Math.round(d.current.temperature_2m);
-      if (wx) { wx.textContent = `${wxState.temp}°F${desc ? ", " + desc : ""}`; wx.hidden = false; if (wxDot) wxDot.hidden = false; }
-      sky.set({ phase: phaseNow(), cover: 0.2, rain: 0, snow: 0, fog: 0, thunder: false, ...fx });
-    } catch { /* offline or blocked: keep the time-of-day sky */ }
-  })();
+      const info = await getInfo();
+      const cur = (await latestObs(info.st)) || (await hourlyNow(info.hourly));
+      const desc = cur.text.toLowerCase();
+      if (wx) {
+        wx.textContent = `${Math.round(cur.f)}°F${desc ? ", " + desc : ""}`;
+        wx.title = "Current conditions from the National Weather Service";
+        wx.hidden = false; if (wxDot) wxDot.hidden = false;
+      }
+      sky.set({ phase: phaseNow(), cover: 0.2, rain: 0, snow: 0, fog: 0, thunder: false, ...fxFrom(cur.text) });
+      lastWx = Date.now();
+    } catch {
+      // offline, blocked or rate limited: keep what we have (or the time-of-day sky) and retry soon
+      if (!lastWx) setTimeout(loadWeather, 60000);
+    } finally { wxBusy = false; }
+  };
+  loadWeather();
+  setInterval(() => { if (!document.hidden) loadWeather(); }, 15 * 60 * 1000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastWx > 15 * 60 * 1000) loadWeather(); });
 
   /* ───────── GitHub numbers: static snapshot first, live refresh second ───────── */
   const fmt = (n) => Number(n).toLocaleString("en-US");

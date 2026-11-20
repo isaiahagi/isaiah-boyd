@@ -28,7 +28,7 @@ Then open http://localhost:4173.
 
 ## Data
 
-- Weather and sunrise/sunset come from the free Open-Meteo API (no key; only fixed Palm Coast coordinates are sent). If it fails, the sky falls back to a time-of-day sky.
+- Current conditions come from the National Weather Service (`api.weather.gov`, free, no key; only fixed Palm Coast coordinates are used) and refresh every 15 minutes while the page is open. Sunrise and sunset are computed locally. If NWS is unreachable, the sky falls back to a time-of-day sky.
 - Stars, repo count and followers load live from the public GitHub API and fall back to `public/data/github.json`.
 - The contribution graph tries a live fetch from `github-contributions-api.jogruber.de` (username only) and falls back to the snapshot.
 - Refresh the snapshot with the GitHub CLI (`gh api users/isaiahagi`, `gh api graphql` for the contribution calendar).
