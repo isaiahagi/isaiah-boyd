@@ -1,7 +1,7 @@
 {
-  // "name" must match the name of your existing Worker in the Cloudflare dashboard.
+  // "name" must match the existing Worker in the Cloudflare dashboard.
   "name": "isaiah-boyd",
   "compatibility_date": "2026-11-01",
-  // Static site only: everything in this folder is served as-is.
-  "assets": { "directory": "." }
+  // Static site: only ./public is served.
+  "assets": { "directory": "./public" }
 }

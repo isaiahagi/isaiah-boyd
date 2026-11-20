@@ -1,6 +1,0 @@
-# Files that are config, not part of the public website
-wrangler.jsonc
-.assetsignore
-node_modules
-.wrangler
-.git
