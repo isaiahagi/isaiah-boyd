@@ -12,22 +12,6 @@
     set(k, v) { try { sessionStorage.setItem(k, v); } catch { /* ignore */ } },
   };
 
-  const yr = $("#yr");
-  if (yr) yr.textContent = new Date().getFullYear();
-
-  /* ───────── Theme ───────── */
-  const themeBtn = $("#theme");
-  const themeMeta = $("#theme-color");
-  const syncTheme = () => {
-    const t = root.dataset.theme;
-    themeBtn.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
-    if (themeMeta) themeMeta.content = t === "dark" ? "#0a0a0b" : "#fafafa";
-  };
-  const setTheme = (t) => { root.dataset.theme = t; try { localStorage.setItem("theme", t); } catch { /* ignore */ } syncTheme(); };
-  const toggleTheme = () => setTheme(root.dataset.theme === "dark" ? "light" : "dark");
-  themeBtn.addEventListener("click", toggleTheme);
-  syncTheme();
-
   /* ───────── Smooth scroll (Lenis) ───────── */
   let lenis = null;
   if (!reduce && typeof window.Lenis === "function") {
@@ -35,60 +19,33 @@
     const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
   }
-  const goTo = (id) => {
-    const el = id === "#top" ? null : $(id);
-    if (id !== "#top" && !el) return;
-    if (lenis) lenis.scrollTo(el || 0, { offset: -68, duration: 1.3, easing: (t) => 1 - Math.pow(1 - t, 4) });
-    else if (el) el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-    else scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
-    history.replaceState(null, "", id === "#top" ? location.pathname : id);
-  };
+  const lockScroll = (on) => { if (lenis) (on ? lenis.stop() : lenis.start()); else document.body.style.overflow = on ? "hidden" : ""; };
   document.addEventListener("click", (e) => {
     const a = e.target.closest && e.target.closest('a[href^="#"]');
     if (!a) return;
     const id = a.getAttribute("href");
     if (id.length < 2) return;
+    const el = $(id);
+    if (!el) return;
     e.preventDefault();
-    goTo(id);
+    if (lenis) lenis.scrollTo(el, { offset: -24, duration: 1.3, easing: (t) => 1 - Math.pow(1 - t, 4) });
+    else el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+    history.replaceState(null, "", id);
   });
 
-  /* ───────── Scroll state: progress, header border, section spy ───────── */
+  /* ───────── Progress bar ───────── */
   const bar = $(".progress i");
-  const top = $(".top");
-  const tlinks = $$("#tnav a");
-  const dockEl = $("#dock");
-  const dlinks = $$("a", dockEl);
-  const dInd = $(".dock__ind", dockEl);
-  const order = ["#top", "#work", "#projects", "#showcase", "#stack", "#lab", "#activity", "#contact"];
-  const secs = order.map((h) => (h === "#top" ? null : $(h)));
-  let current = "";
-  const spy = () => {
-    let cur = "#top";
-    const line = innerHeight * 0.35;
-    for (let i = 1; i < secs.length; i++) if (secs[i] && secs[i].getBoundingClientRect().top <= line) cur = order[i];
-    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) cur = "#contact";
-    if (cur === current) return;
-    current = cur;
-    tlinks.forEach((a) => { const on = a.getAttribute("href") === cur; a.classList.toggle("is-active", on); on ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current"); });
-    let idx = -1;
-    dlinks.forEach((a, i) => { const on = a.getAttribute("href") === cur; a.classList.toggle("is-active", on); if (on) idx = i; });
-    // Dock has no #stack/#activity entry: highlight the nearest one before it
-    if (idx < 0) { const k = order.indexOf(cur); for (let j = k; j >= 0 && idx < 0; j--) idx = dlinks.findIndex((a) => a.getAttribute("href") === order[j]); }
-    if (dInd && idx >= 0) dInd.style.transform = `translateX(${5 + idx * 46}px)`;
-  };
   let ticking = false;
   const onScroll = () => {
-    const max = document.documentElement.scrollHeight - innerHeight;
+    const max = root.scrollHeight - innerHeight;
     bar.style.transform = `scaleX(${max > 0 ? clamp(scrollY / max, 0, 1) : 0})`;
-    top.classList.toggle("scrolled", scrollY > 8);
-    spy();
     ticking = false;
   };
   addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
-  addEventListener("resize", () => { current = ""; onScroll(); }, { passive: true });
+  addEventListener("resize", onScroll, { passive: true });
   onScroll();
 
-  /* ───────── Reveal on scroll ───────── */
+  /* ───────── Reveal ───────── */
   const items = $$("[data-reveal]");
   if (hasIO && !reduce) {
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px", threshold: 0.05 });
@@ -96,30 +53,38 @@
     items.forEach((el) => {
       const n = seen.get(el.parentElement) || 0;
       seen.set(el.parentElement, n + 1);
-      el.style.setProperty("--d", `${Math.min(n, 5) * 0.06}s`);
+      el.style.setProperty("--d", `${Math.min(n, 4) * 0.06}s`);
       io.observe(el);
     });
   } else items.forEach((el) => el.classList.add("in"));
 
-  /* ───────── Card spotlight ───────── */
-  if (canHover) document.addEventListener("pointermove", (e) => {
-    const c = e.target.closest && e.target.closest(".tile");
-    if (!c) return;
-    const r = c.getBoundingClientRect();
-    c.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    c.style.setProperty("--my", `${e.clientY - r.top}px`);
-  }, { passive: true });
-
-  /* ───────── Work accordion ───────── */
-  $$(".job__btn").forEach((b) => b.addEventListener("click", () => {
-    const job = b.closest(".job");
-    const open = !job.classList.contains("is-open");
-    job.classList.toggle("is-open", open);
-    b.setAttribute("aria-expanded", String(open));
-  }));
+  /* ───────── Copy Discord username ───────── */
+  const status = $("#copy-status");
+  $$("[data-copy]").forEach((btn) => {
+    let t;
+    btn.addEventListener("click", async () => {
+      const text = btn.dataset.copy;
+      let ok = false;
+      try { await navigator.clipboard.writeText(text); ok = true; } catch {
+        const ta = document.createElement("textarea");
+        ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        try { ok = document.execCommand("copy"); } catch { /* ignore */ }
+        ta.remove();
+      }
+      const isText = btn.classList.contains("u-btn");
+      const orig = btn.dataset.orig || (isText ? btn.textContent : btn.title);
+      btn.dataset.orig = orig;
+      if (isText) btn.textContent = ok ? "copied!" : "copy failed"; else btn.title = ok ? "Copied!" : "Copy failed";
+      status.textContent = ok ? "Discord username copied to clipboard" : "Copy failed";
+      clearTimeout(t);
+      t = setTimeout(() => { if (isText) btn.textContent = orig; else btn.title = orig; status.textContent = ""; }, 1800);
+    });
+  });
 
   /* ───────── Ball skin picker ───────── */
   const grid = $("#pk-grid");
+  const skins = grid ? $$("button", grid).map((b) => ({ n: b.dataset.n, f: b.dataset.f })) : [];
   if (grid) {
     const btns = $$("button", grid);
     const img = $("#pk-img"), nm = $("#pk-t"), no = $("#pk-n");
@@ -146,57 +111,216 @@
     });
   }
 
-  /* ───────── Copy Discord handle ───────── */
-  const status = $("#copy-status");
-  $$("[data-copy]").forEach((btn) => {
-    let t;
-    btn.addEventListener("click", async () => {
-      const text = btn.dataset.copy;
-      let ok = false;
-      try { await navigator.clipboard.writeText(text); ok = true; } catch {
-        const ta = document.createElement("textarea");
-        ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
-        document.body.appendChild(ta); ta.select();
-        try { ok = document.execCommand("copy"); } catch { /* ignore */ }
-        ta.remove();
-      }
-      const span = $("span", btn), orig = btn.dataset.label || span.textContent;
-      btn.dataset.label = orig;
-      span.textContent = ok ? "Copied" : "Copy failed";
-      status.textContent = ok ? "Discord username copied to clipboard" : "Copy failed";
-      clearTimeout(t);
-      t = setTimeout(() => { span.textContent = orig; status.textContent = ""; }, 1800);
-    });
-  });
+  /* ───────── Easter egg: ball polaroids ───────── */
+  const egg = $("#egg"), pols = $("#pols"), eggBtn = $("#egg-open"), eggBg = $(".egg-ov__bg");
+  if (egg && eggBtn && skins.length) {
+    const tints = ["#2b2622", "#1d2c3d", "#3b2a1c", "#2c2140", "#1f3a33"];
+    const rots = [-7, 4, -3, 6], ys = [0, 14, -6, 10];
+    const openEgg = () => {
+      const pick = skins.slice().sort(() => Math.random() - 0.5).slice(0, 4);
+      pols.replaceChildren(...pick.map((s, i) => {
+        const f = document.createElement("figure"); f.className = "pol";
+        f.style.setProperty("--r", `${rots[i]}deg`); f.style.setProperty("--y", `${ys[i]}px`); f.style.setProperty("--i", i);
+        const ph = document.createElement("div"); ph.className = "pol__ph"; ph.style.setProperty("--bgc", tints[(i + Math.floor(Math.random() * 5)) % tints.length]);
+        const im = document.createElement("img"); im.src = `img/balls/${s.f}.webp`; im.alt = `${s.n} ball skin`; im.width = 268; im.height = 268;
+        ph.append(im);
+        const c = document.createElement("figcaption"); c.textContent = s.n.toLowerCase();
+        f.append(ph, c); return f;
+      }));
+      egg.hidden = false; lockScroll(true); eggBg.focus();
+    };
+    const closeEgg = () => { if (egg.hidden) return; egg.hidden = true; lockScroll(false); eggBtn.focus(); };
+    eggBtn.addEventListener("click", openEgg);
+    eggBg.addEventListener("click", closeEgg);
+    addEventListener("keydown", (e) => { if (egg.hidden) return; if (e.key === "Escape") closeEgg(); else if (e.key === "Tab") { e.preventDefault(); eggBg.focus(); } });
+  }
 
-  /* ───────── GitHub data: static snapshot first, live refresh second ───────── */
+  /* ───────── Pixel sky for Palm Coast, FL (live weather + time) ───────── */
+  const NY = "America/New_York";
+  const skyCv = $("#sky");
+  const toggle = $("#sky-toggle");
+  const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => (v + 0.5) / 16 - 0.5);
+  const hex = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  const pack = (c) => (255 << 24) | (c[2] << 16) | (c[1] << 8) | c[0];
+  const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+
+  const sky = (() => {
+    const ctx = skyCv.getContext("2d");
+    const wrap = skyCv.parentElement;
+    const PAL = {
+      day: ["#0c0b0a", "#10213f", "#17335f", "#21497f", "#2f64a6", "#4a86cc"],
+      dusk: ["#0c0b0a", "#24142a", "#4a2140", "#8a3a4a", "#d0643f", "#f0a05e"],
+      night: ["#0c0b0a", "#0a1024", "#0e1836", "#142550", "#1d3a74", "#2a529c"],
+    };
+    const RAIN = { day: "#b4d3f8", dusk: "#f5d3ae", night: "#86abea" };
+    const ACCENT = { day: "#8ab8f0", dusk: "#f0a368", night: "#9aabee" };
+    const st = { phase: "day", cover: 0.2, rain: 0, snow: 0, fog: 0, thunder: false };
+    let W = 0, H = 0, img, buf, ramp, rainHead = 0, rainTail = 0, parts = [], stars = [];
+    let running = false, paused = false, raf = 0, last = 0, flash = 0, nextFlash = 0;
+
+    const applyPhase = () => {
+      ramp = PAL[st.phase].map((h) => pack(hex(h)));
+      const rc = hex(RAIN[st.phase]);
+      rainHead = pack(rc); rainTail = pack(mix(rc, hex(PAL[st.phase][3]), 0.6));
+      root.style.setProperty("--sky", ACCENT[st.phase]);
+    };
+    const seed = () => {
+      parts = [];
+      const nRain = Math.floor(W * st.rain), nSnow = Math.floor(W * st.snow);
+      for (let i = 0; i < nRain; i++) parts.push({ k: 0, x: Math.random() * (W + 20), y: Math.random() * H, v: 38 + Math.random() * 34, l: 3 + Math.floor(Math.random() * 3) });
+      for (let i = 0; i < nSnow; i++) parts.push({ k: 1, x: Math.random() * W, y: Math.random() * H, v: 6 + Math.random() * 9, s: Math.random() * 6 });
+      stars = Array.from({ length: Math.floor(W * H * 0.012) }, () => ({ x: Math.floor(Math.random() * W), y: Math.floor(Math.random() * H * 0.6), p: Math.random() * 6 }));
+    };
+    const size = () => {
+      const cell = innerWidth < 640 ? 4 : 5;
+      W = Math.max(8, Math.ceil(wrap.clientWidth / cell)); H = Math.max(8, Math.ceil(wrap.clientHeight / cell));
+      skyCv.width = W; skyCv.height = H;
+      img = ctx.createImageData(W, H); buf = new Uint32Array(img.data.buffer);
+      seed();
+    };
+    const base = (ny) => {
+      if (st.phase === "day") return Math.pow(1 - ny, 1.25) * 0.95;
+      if (st.phase === "night") return Math.pow(1 - ny, 1.5) * 0.55;
+      return 0.85 * Math.exp(-Math.pow((ny - 0.28) / 0.26, 2)) + 0.18 * (1 - ny);
+    };
+    const draw = (t, dt) => {
+      if (st.thunder && t * 1000 > nextFlash) { flash = 1; nextFlash = t * 1000 + 5000 + Math.random() * 7000; }
+      flash *= Math.pow(0.04, dt);
+      for (let y = 0; y < H; y++) {
+        const ny = y / H, b = base(ny);
+        for (let x = 0; x < W; x++) {
+          const nx = x / W;
+          let I = b;
+          if (st.cover > 0.05) {
+            const n = 0.5 + 0.25 * (Math.sin(nx * 5.1 + t * 0.35 + 1.7 * Math.sin(ny * 4.2 + t * 0.2)) + Math.sin(nx * 11.3 - t * 0.5 + ny * 6.1));
+            I *= (1 - 0.55 * st.cover) + 0.55 * st.cover * n * 1.35;
+          }
+          if (st.fog) I = I * (1 - st.fog) + 0.42 * st.fog * (1 - ny * 0.5);
+          I += flash * 0.5 * (1 - ny);
+          const v = clamp(Math.round(I * 5 + BAYER[(y & 3) * 4 + (x & 3)] * 0.9), 0, 5);
+          buf[y * W + x] = ramp[v];
+        }
+      }
+      if (st.phase === "night" && st.cover < 0.7) {
+        const sc = pack([207, 217, 255]);
+        stars.forEach((s) => { if (Math.sin(t * 2 + s.p) > -0.25 && buf[s.y * W + s.x] !== undefined) buf[s.y * W + s.x] = sc; });
+      }
+      const put = (x, y, c) => { x |= 0; y |= 0; if (x >= 0 && x < W && y >= 0 && y < H) buf[y * W + x] = c; };
+      const snow = pack([232, 238, 252]);
+      parts.forEach((p) => {
+        if (p.k === 0) {
+          p.y += p.v * dt; p.x += p.v * dt * 0.28;
+          if (p.y > H) { p.y = -p.l; p.x = Math.random() * (W + 20) - 10; }
+          put(p.x, p.y, rainHead);
+          for (let k = 1; k <= p.l; k++) put(p.x - 0.28 * k, p.y - k, k > 1 ? rainTail : rainHead);
+        } else {
+          p.y += p.v * dt; p.x += Math.sin(t * 1.6 + p.s) * 0.18;
+          if (p.y > H) { p.y = -1; p.x = Math.random() * W; }
+          put(p.x, p.y, snow);
+        }
+      });
+      ctx.putImageData(img, 0, 0);
+    };
+    const loop = (now) => {
+      if (!running) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 42) return;
+      const dt = Math.min(0.1, (now - last) / 1000 || 0.04); last = now;
+      draw(now / 1000, dt);
+    };
+    const start = () => { if (!running && !paused && !reduce && !document.hidden) { running = true; last = performance.now(); raf = requestAnimationFrame(loop); } };
+    const stop = () => { running = false; cancelAnimationFrame(raf); };
+
+    applyPhase(); size(); draw(3.2, 0.04); skyCv.classList.add("on");
+    if (!reduce) {
+      if (hasIO) new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop())).observe(wrap); else start();
+      document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+    }
+    let rt;
+    addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { size(); draw(3.2, 0.04); }, 150); }, { passive: true });
+
+    return {
+      set(next) { Object.assign(st, next); applyPhase(); seed(); if (!running) draw(3.2, 0.04); },
+      phase: () => st.phase,
+      toggle() { paused = !paused; paused ? stop() : start(); return paused; },
+    };
+  })();
+
+  if (toggle) {
+    if (reduce) { toggle.hidden = true; if (toggle.previousElementSibling) toggle.previousElementSibling.hidden = true; }
+    else toggle.addEventListener("click", () => { const p = sky.toggle(); toggle.textContent = p ? "play sky" : "pause sky"; toggle.setAttribute("aria-pressed", String(p)); });
+  }
+
+  // Time in Palm Coast (Eastern) and live weather from Open-Meteo (no key, no personal data sent)
+  const clock = $("#clock"), wx = $("#wx"), wxDot = $("#wx-dot");
+  const tf = new Intl.DateTimeFormat("en-US", { timeZone: NY, hour: "numeric", minute: "2-digit" });
+  const hf = new Intl.DateTimeFormat("en-US", { timeZone: NY, hour: "numeric", minute: "numeric", hourCycle: "h23" });
+  const minsNow = () => { const p = hf.formatToParts(new Date()); return +p.find((x) => x.type === "hour").value * 60 + +p.find((x) => x.type === "minute").value; };
+  const toMins = (s) => (s ? +s.slice(11, 13) * 60 + +s.slice(14, 16) : null);
+  const WX = (c) => {
+    if (c === 0) return ["clear", { cover: 0.05 }];
+    if (c === 1) return ["mostly clear", { cover: 0.18 }];
+    if (c === 2) return ["partly cloudy", { cover: 0.45 }];
+    if (c === 3) return ["overcast", { cover: 0.85 }];
+    if (c === 45 || c === 48) return ["foggy", { cover: 0.6, fog: 0.5 }];
+    if (c >= 51 && c <= 57) return ["drizzle", { cover: 0.8, rain: 0.1 }];
+    if (c === 61) return ["light rain", { cover: 0.8, rain: 0.16 }];
+    if (c === 63 || c === 66 || c === 67) return ["rain", { cover: 0.85, rain: 0.24 }];
+    if (c === 65) return ["heavy rain", { cover: 0.9, rain: 0.34 }];
+    if (c >= 71 && c <= 77) return ["snow", { cover: 0.8, snow: 0.2 }];
+    if (c === 80) return ["light showers", { cover: 0.75, rain: 0.18 }];
+    if (c === 81) return ["showers", { cover: 0.85, rain: 0.26 }];
+    if (c === 82) return ["heavy showers", { cover: 0.9, rain: 0.36 }];
+    if (c === 85 || c === 86) return ["snow showers", { cover: 0.8, snow: 0.22 }];
+    if (c >= 95) return ["thunderstorm", { cover: 0.92, rain: 0.3, thunder: true }];
+    return ["", { cover: 0.3 }];
+  };
+  const wxState = { sr: 7 * 60, ss: 18 * 60 + 30, temp: null, desc: "", fx: { cover: 0.2, rain: 0, snow: 0, fog: 0, thunder: false } };
+  const phaseNow = () => {
+    const m = minsNow(), { sr, ss } = wxState;
+    if (m >= sr - 45 && m <= sr + 40) return "dusk";
+    if (m > sr + 40 && m < ss - 60) return "day";
+    if (m >= ss - 60 && m <= ss + 45) return "dusk";
+    return "night";
+  };
+  const tick = () => {
+    if (clock) clock.textContent = tf.format(new Date()).toLowerCase();
+    const ph = phaseNow();
+    if (ph !== sky.phase()) sky.set({ phase: ph });
+  };
+  tick(); setInterval(tick, 20000);
+  sky.set({ phase: phaseNow() });
+
+  (async () => {
+    try {
+      const url = "https://api.open-meteo.com/v1/forecast?latitude=29.585&longitude=-81.207&current=temperature_2m,weather_code&daily=sunrise,sunset&temperature_unit=fahrenheit&timezone=America%2FNew_York&forecast_days=1";
+      let d; const c = store.get("wx");
+      if (c) { const o = JSON.parse(c); if (Date.now() - o.t < 900000) d = o.d; }
+      if (!d) { const r = await fetch(url); if (!r.ok) throw new Error(r.status); d = await r.json(); store.set("wx", JSON.stringify({ t: Date.now(), d })); }
+      wxState.sr = toMins(d.daily.sunrise[0]) ?? wxState.sr; wxState.ss = toMins(d.daily.sunset[0]) ?? wxState.ss;
+      const [desc, fx] = WX(d.current.weather_code);
+      wxState.temp = Math.round(d.current.temperature_2m);
+      if (wx) { wx.textContent = `${wxState.temp}°F${desc ? ", " + desc : ""}`; wx.hidden = false; if (wxDot) wxDot.hidden = false; }
+      sky.set({ phase: phaseNow(), cover: 0.2, rain: 0, snow: 0, fog: 0, thunder: false, ...fx });
+    } catch { /* offline or blocked: keep the time-of-day sky */ }
+  })();
+
+  /* ───────── GitHub numbers: static snapshot first, live refresh second ───────── */
   const fmt = (n) => Number(n).toLocaleString("en-US");
   const gh = { followers: null, repos: null, contrib: null, repo: {} };
   const paintGh = () => {
     $$("[data-gh]").forEach((el) => {
       const [k, name] = el.dataset.gh.split(":");
-      let v = null;
-      if (k === "stars" || k === "forks") v = gh.repo[name] && gh.repo[name][k === "stars" ? "stars" : "forks"];
-      else v = gh[k];
+      const v = (k === "stars" || k === "forks") ? (gh.repo[name] && gh.repo[name][k]) : gh[k];
       if (v != null) el.textContent = fmt(v);
     });
   };
-  const rel = (iso) => {
-    const s = (Date.now() - new Date(iso).getTime()) / 1000;
-    const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
-    const steps = [[60, "second"], [60, "minute"], [24, "hour"], [7, "day"], [4.345, "week"], [12, "month"], [Infinity, "year"]];
-    let v = s, unit = "second";
-    for (const [div, u] of steps) { unit = u; if (Math.abs(v) < div) break; v /= div; }
-    return rtf.format(-Math.round(v), unit);
-  };
-
   const heatG = $("#heat-g"), heatM = $("#heat-m");
   const renderHeat = (start, days) => {
     if (!heatG || !days || !days.length) return;
     heatG.replaceChildren(); heatM.replaceChildren();
     const lvl = (c) => (c <= 0 ? 0 : c <= 2 ? 1 : c <= 5 ? 2 : c <= 11 ? 3 : 4);
-    const d0 = new Date(`${start}T00:00:00Z`);
-    const offset = d0.getUTCDay();
+    const d0 = new Date(`${start}T00:00:00Z`), offset = d0.getUTCDay();
     const frag = document.createDocumentFragment();
     for (let i = 0; i < offset; i++) { const e = document.createElement("i"); e.style.visibility = "hidden"; frag.append(e); }
     let lastMonth = -1;
@@ -204,8 +328,7 @@
       const date = new Date(d0.getTime() + i * 864e5);
       const col = Math.floor((i + offset) / 7);
       const cell = document.createElement("i");
-      const l = lvl(c);
-      if (l) cell.className = `l${l}`;
+      const l = lvl(c); if (l) cell.className = `l${l}`;
       cell.style.setProperty("--w", col);
       cell.title = `${c} contribution${c === 1 ? "" : "s"} on ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}`;
       frag.append(cell);
@@ -215,8 +338,7 @@
           lastMonth = m;
           const s = document.createElement("span");
           s.textContent = date.toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
-          s.style.left = `${col * 12}px`;
-          heatM.append(s);
+          s.style.left = `${col * 12}px`; heatM.append(s);
         }
       }
     });
@@ -226,26 +348,10 @@
   };
   const setContrib = (total, start, days, note) => {
     gh.contrib = total; paintGh();
-    const t = $("#act-total"); if (t) t.textContent = `/ ${fmt(total)} contributions in the last year`;
+    const t = $("#act-total"); if (t) t.textContent = `${fmt(total)} contributions in the last year`;
     const n = $("#heat-note"); if (n) n.textContent = note;
     renderHeat(start, days);
   };
-  const renderRecent = (list) => {
-    const ul = $("#recent"); if (!ul || !list.length) return;
-    ul.replaceChildren(...list.map((r) => {
-      const li = document.createElement("li");
-      const a = document.createElement("a"); a.className = "rrow rrow--s"; a.href = `https://github.com/isaiahagi/${r.name}`; a.rel = "noopener";
-      const b = document.createElement("b"); b.textContent = r.name;
-      const s = document.createElement("span"); s.textContent = r.desc || "";
-      const em = document.createElement("em"); const tm = document.createElement("time"); tm.dateTime = r.pushed; tm.textContent = `pushed ${rel(r.pushed)}`; em.append(tm);
-      a.append(b, s, em); li.append(a); return li;
-    }));
-  };
-  const recentFrom = (repos) => Object.entries(repos)
-    .filter(([n, r]) => n !== "izzyfrm" && r.desc !== undefined)
-    .sort((a, b) => new Date(b[1].pushed) - new Date(a[1].pushed)).slice(0, 5)
-    .map(([name, r]) => ({ name, desc: r.desc, pushed: r.pushed }));
-
   const getJSON = async (url, key, ttl = 900000) => {
     const c = store.get(key);
     if (c) { try { const o = JSON.parse(c); if (Date.now() - o.t < ttl) return o.d; } catch { /* ignore */ } }
@@ -253,28 +359,21 @@
     if (!r.ok) throw new Error(String(r.status));
     const d = await r.json(); store.set(key, JSON.stringify({ t: Date.now(), d })); return d;
   };
-
   (async () => {
-    let snap = null;
     try {
-      snap = await (await fetch("data/github.json", { cache: "no-cache" })).json();
+      const snap = await (await fetch("data/github.json", { cache: "no-cache" })).json();
       gh.followers = snap.followers; gh.repos = snap.public_repos;
       Object.entries(snap.repos).forEach(([n, r]) => { gh.repo[n] = r; });
       setContrib(snap.contrib.total, snap.contrib.start, snap.contrib.days, `Public contributions on GitHub. Snapshot from ${new Date(snap.generated + "T00:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}.`);
-      renderRecent(recentFrom(snap.repos));
     } catch { /* keep static HTML */ }
-
-    // Live refresh (best effort; falls back silently)
     try {
       const [u, repos] = await Promise.all([
         getJSON("https://api.github.com/users/isaiahagi", "gh:user"),
         getJSON("https://api.github.com/users/isaiahagi/repos?per_page=100&sort=pushed", "gh:repos"),
       ]);
       gh.followers = u.followers; gh.repos = u.public_repos;
-      const map = {};
-      repos.forEach((r) => { map[r.name] = { stars: r.stargazers_count, forks: r.forks_count, pushed: r.pushed_at, desc: r.description || "" }; gh.repo[r.name] = map[r.name]; });
+      repos.forEach((r) => { gh.repo[r.name] = { stars: r.stargazers_count, forks: r.forks_count }; });
       paintGh();
-      renderRecent(recentFrom(map));
     } catch { /* offline or rate limited */ }
     try {
       const c = await getJSON("https://github-contributions-api.jogruber.de/v4/isaiahagi?y=last", "gh:contrib", 3600000);
@@ -282,90 +381,6 @@
       if (list.length > 300) setContrib((c.total && c.total.lastYear) || list.reduce((s, d) => s + d.count, 0), list[0].date, list.map((d) => d.count), "Public contributions on GitHub. Live.");
     } catch { /* keep snapshot */ }
   })();
-
-  /* ───────── Command palette ───────── */
-  const cmd = $("#cmd");
-  const cmdQ = $("#cmd-q");
-  const cmdList = $("#cmd-list");
-  const cmdEmpty = $("#cmd-empty");
-  const ext = (url) => () => window.open(url, "_blank", "noopener");
-  const nav = (id) => () => goTo(id);
-  const copyDiscord = () => { const b = $("[data-copy]"); if (b) b.click(); };
-  const ACTIONS = [
-    { g: "Navigate", l: "Home", i: "home", h: "", run: nav("#top") },
-    { g: "Navigate", l: "Work", i: "briefcase", h: "experience", run: nav("#work") },
-    { g: "Navigate", l: "Projects", i: "layers", h: "", run: nav("#projects") },
-    { g: "Navigate", l: "Showcase", i: "image", h: "basketball heroes", run: nav("#showcase") },
-    { g: "Navigate", l: "Stack", i: "code", h: "tech", run: nav("#stack") },
-    { g: "Navigate", l: "Lab", i: "flask", h: "ai experiments", run: nav("#lab") },
-    { g: "Navigate", l: "Activity", i: "layers", h: "github", run: nav("#activity") },
-    { g: "Navigate", l: "Contact", i: "mail", h: "", run: nav("#contact") },
-    { g: "Projects", l: "roblox-ai", i: "github", h: "github", run: ext("https://github.com/isaiahagi/roblox-ai") },
-    { g: "Projects", l: "Brickyard", i: "ur", h: "live site", run: ext("https://brickyard.ch") },
-    { g: "Projects", l: "CatNews", i: "ur", h: "live site", run: ext("https://catnews.space") },
-    { g: "Projects", l: "Opcoda", i: "ur", h: "live site", run: ext("https://opcoda.cc") },
-    { g: "Projects", l: "roblox-ui-skill", i: "github", h: "github", run: ext("https://github.com/isaiahagi/roblox-ui-skill") },
-    { g: "Projects", l: "claude-rpc", i: "github", h: "github", run: ext("https://github.com/isaiahagi/claude-rpc") },
-    { g: "Links", l: "GitHub profile", i: "github", h: "isaiahagi", run: ext("https://github.com/isaiahagi") },
-    { g: "Links", l: "X (Twitter)", i: "ur", h: "@IsaiahSrc", run: ext("https://x.com/IsaiahSrc") },
-    { g: "Links", l: "Basketball Heroes Discord", i: "ur", h: "join", run: ext("https://discord.gg/2hnuRyEkvt") },
-    { g: "Actions", l: "Copy Discord username", i: "copy", h: "isaiahai", run: copyDiscord },
-    { g: "Actions", l: "Toggle theme", i: "sun", h: "light / dark", run: toggleTheme },
-  ];
-  let shown = [], sel = 0, lastFocus = null;
-  const svg = (id) => { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("class", "ic"); s.setAttribute("width", "16"); s.setAttribute("height", "16"); const u = document.createElementNS("http://www.w3.org/2000/svg", "use"); u.setAttribute("href", `#i-${id}`); s.append(u); return s; };
-  const renderCmd = () => {
-    const q = cmdQ.value.trim().toLowerCase();
-    shown = ACTIONS.filter((a) => !q || `${a.l} ${a.h} ${a.g}`.toLowerCase().includes(q));
-    sel = clamp(sel, 0, Math.max(0, shown.length - 1));
-    cmdList.replaceChildren();
-    let g = "";
-    shown.forEach((a, i) => {
-      if (a.g !== g) { g = a.g; const h = document.createElement("li"); h.className = "cmd__g"; h.setAttribute("role", "presentation"); h.textContent = g; cmdList.append(h); }
-      const li = document.createElement("li");
-      li.className = `cmd__i${i === sel ? " is-sel" : ""}`; li.id = `cmd-o-${i}`; li.setAttribute("role", "option"); li.setAttribute("aria-selected", String(i === sel));
-      const sp = document.createElement("span"); sp.textContent = a.l;
-      li.append(svg(a.i), sp);
-      if (a.h) { const em = document.createElement("em"); em.textContent = a.h; li.append(em); }
-      li.addEventListener("pointermove", () => { if (sel !== i) { sel = i; mark(); } });
-      li.addEventListener("click", () => run(i));
-      cmdList.append(li);
-    });
-    cmdEmpty.hidden = shown.length > 0;
-    cmdQ.setAttribute("aria-activedescendant", shown.length ? `cmd-o-${sel}` : "");
-  };
-  const mark = () => {
-    $$(".cmd__i", cmdList).forEach((el, i) => { const on = i === sel; el.classList.toggle("is-sel", on); el.setAttribute("aria-selected", String(on)); if (on) el.scrollIntoView({ block: "nearest" }); });
-    cmdQ.setAttribute("aria-activedescendant", `cmd-o-${sel}`);
-  };
-  const openCmd = () => {
-    if (!cmd.hidden) return;
-    lastFocus = document.activeElement; cmd.hidden = false; cmdQ.value = ""; sel = 0; renderCmd();
-    if (lenis) lenis.stop(); else document.body.style.overflow = "hidden";
-    cmdQ.focus();
-  };
-  const closeCmd = () => {
-    if (cmd.hidden) return;
-    cmd.hidden = true;
-    if (lenis) lenis.start(); else document.body.style.overflow = "";
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
-  };
-  const run = (i) => { const a = shown[i]; if (!a) return; closeCmd(); setTimeout(a.run, 60); };
-  $("#open-cmd").addEventListener("click", openCmd);
-  cmd.addEventListener("click", (e) => { if (e.target.hasAttribute("data-close")) closeCmd(); });
-  cmdQ.addEventListener("input", () => { sel = 0; renderCmd(); });
-  cmd.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") { e.preventDefault(); closeCmd(); }
-    else if (e.key === "ArrowDown") { e.preventDefault(); if (shown.length) { sel = (sel + 1) % shown.length; mark(); } }
-    else if (e.key === "ArrowUp") { e.preventDefault(); if (shown.length) { sel = (sel - 1 + shown.length) % shown.length; mark(); } }
-    else if (e.key === "Enter") { e.preventDefault(); run(sel); }
-    else if (e.key === "Tab") { e.preventDefault(); cmdQ.focus(); }
-  });
-  addEventListener("keydown", (e) => {
-    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || "") || (e.target && e.target.isContentEditable);
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); cmd.hidden ? openCmd() : closeCmd(); }
-    else if (e.key === "/" && !typing && cmd.hidden) { e.preventDefault(); openCmd(); }
-  });
 
   /* ───────── Lab 1: uniform symmetric quantization ───────── */
   const qSvg = $("#q-svg");
@@ -378,15 +393,14 @@
       return 0.55 * Math.sin(x * 6.2 * Math.PI) * Math.exp(-((x - 0.5) ** 2) * 2) + 0.35 * Math.sin(x * 17) * 0.6 + rnd() * 0.3;
     });
     const maxAbs = Math.max(...w.map(Math.abs));
-    const input = $("#q-bits");
-    const out = $("#q-out");
+    const input = $("#q-bits"), out = $("#q-out");
     const W = 640, H = 220, mid = H / 2, bw = W / N, sc = (H / 2 - 14) / maxAbs;
     const NS = "http://www.w3.org/2000/svg";
     const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
     qSvg.append(el("line", { x1: 0, x2: W, y1: mid, y2: mid, stroke: "currentColor", "stroke-opacity": ".25", "stroke-width": 1, "vector-effect": "non-scaling-stroke" }));
     const bars = [], dots = [];
     for (let i = 0; i < N; i++) {
-      const b = el("rect", { x: i * bw + 1, width: Math.max(bw - 2, 1), rx: 1.5, fill: "var(--accent)", "fill-opacity": ".85" });
+      const b = el("rect", { x: i * bw + 1, width: Math.max(bw - 2, 1), rx: 1.5, fill: "#e07a3d", "fill-opacity": ".85" });
       const d = el("rect", { x: i * bw, width: bw, height: 2.5, fill: "currentColor" });
       bars.push(b); dots.push(d); qSvg.append(b);
     }
