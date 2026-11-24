@@ -1,20 +1,20 @@
 # Isaiah Boyd — Portfolio
 
-Source for my personal portfolio: a dependency-free static site, hand-written HTML, CSS and a little JavaScript. No build step.
-
-Palm Coast, FL. The page header shows the real local time and weather, and a pixel sky that follows both.
+Source for [isaiahboyd.xyz](https://isaiahboyd.xyz): a dependency-free static site with a live ASCII-art background. Hand-written HTML, CSS and a little JavaScript. No build step.
 
 ## Structure
 
 ```
 public/
-  index.html        content, semantics and the SVG icon sprite
-  styles.css        design tokens and layout
-  main.js           pixel sky + weather, ball polaroids, skin picker, GitHub data, lab demos
-  lenis.min.js      Lenis smooth scrolling (MIT), vendored
-  data/github.json  snapshot of GitHub stats and the contribution calendar
-  fonts/            DM Sans and Caveat (self-hosted, variable)
-  img/              avatar, Basketball Heroes banner, ball skins, project icons, Open Graph image
+  index.html        content and semantics
+  styles.css        design tokens, layout, frame buttons, combobox, saved buttons
+  bg.js             ASCII background engine (canvas glyph atlas; Ocean, Plasma, Rain, Off)
+  hero.js           ASCII wordmark scramble, spinning ASCII basketball, role typewriter
+  main.js           clock, reveal, counters, GitHub stats, copy buttons, combobox, pull-to-refresh
+  img/sprite.svg    all icons as one SVG sprite (brand marks + Lucide UI icons)
+  img/              avatar, Open Graph image, touch icon
+  fonts/            DM Sans and JetBrains Mono (self-hosted, variable)
+  data/github.json  fallback snapshot for the GitHub numbers
 wrangler.jsonc      Cloudflare Workers static-assets config (serves ./public)
 ```
 
@@ -26,12 +26,28 @@ python -m http.server 4173 --directory public
 
 Then open http://localhost:4173.
 
+## Design notes
+
+- Art direction: terminal-noir. Near-black, bone text, one ember accent (`--accent`), ASCII everywhere.
+- **Background picker** (bottom-left combobox) switches the canvas scene. The choice is remembered in `localStorage`. The re-roll button, or pulling down at the top of the page on a touch device, re-seeds the scene and re-scrambles the wordmark.
+- **Frame buttons** (`.fbtn`): corner brackets that grow into a full frame on hover and focus.
+- **Saved buttons** (`.save`): the copy button morphs its icon into a check.
+- Respects `prefers-reduced-motion`: static background frame, no typewriter, wordmark scramble or reveals.
+- Works without JavaScript (content is plain HTML; only the background and effects need JS).
+
+## Icons
+
+Everything is one sprite, `public/img/sprite.svg`, referenced with `<use href="img/sprite.svg#id">`.
+
+- `b-*` brand marks: [Simple Icons](https://simpleicons.org) (CC0), plus C# from [devicon](https://devicon.dev) (MIT), the JAX mark from [jax-ml/jax](https://github.com/jax-ml/jax) and the SGLang mark redrawn from [sgl-project/sglang](https://github.com/sgl-project/sglang) as a one-colour outline.
+- `l-*` UI and concept icons: [Lucide](https://lucide.dev) (ISC).
+
+Brand names and logos belong to their owners.
+
 ## Data
 
-- Current conditions come from the National Weather Service (`api.weather.gov`, free, no key; only fixed Palm Coast coordinates are used) and refresh every 15 minutes while the page is open. Sunrise and sunset are computed locally. If NWS is unreachable, the sky falls back to a time-of-day sky.
-- Stars, repo count and followers load live from the public GitHub API and fall back to `public/data/github.json`.
-- The contribution graph tries a live fetch from `github-contributions-api.jogruber.de` (username only) and falls back to the snapshot.
-- Refresh the snapshot with the GitHub CLI (`gh api users/isaiahagi`, `gh api graphql` for the contribution calendar).
+- Public repo count and followers load live from the public GitHub API (`api.github.com/users/isaiahagi`) and fall back to `public/data/github.json`.
+- The clock uses the `America/New_York` time zone.
 
 ## Deploy
 
@@ -40,8 +56,3 @@ Cloudflare Workers serves `./public` as static assets (see `wrangler.jsonc`).
 ```sh
 npx wrangler deploy
 ```
-
-## Notes
-
-- Respects `prefers-reduced-motion` (static sky, no smooth scroll or reveals) and works without JavaScript.
-- The quantization and tokenization panels are small browser-side illustrations, not benchmarks.
