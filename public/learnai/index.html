@@ -16,6 +16,8 @@
     .by { display: flex; align-items: center; gap: 6px; } .by img { width: 24px; height: 24px; border-radius: 50%; } .by svg { width: 16px; height: 16px; }
     header { display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--muted); font-size: 14px; }
     button { font: inherit; color: inherit; background: none; border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+    .ask { flex: 1; margin: 0; text-align: center; } .ask strong { color: var(--text); } header button, .by { flex: none; white-space: nowrap; }
+    @media (max-width: 600px) { header { flex-wrap: wrap; } .ask { order: 1; flex-basis: 100%; } }
     h1, h2, h3 { line-height: 1.3; }
     h1 { font-size: 32px; margin: 40px 0 16px; letter-spacing: -.035em; }
     h2 { font-size: 20px; margin: 0 0 16px; letter-spacing: -.02em; }
@@ -48,6 +50,7 @@
 <div class="page" id="top">
   <header>
     <button id="theme" type="button" hidden>switch theme</button>
+    <p class="ask">more questions? dm me on discord <strong>@isaiahbd</strong>, i'm happy to answer questions about AI/LLMs or anything.</p>
     <div class="by">
   made by <img src="https://pbs.twimg.com/profile_images/2125540510836146176/y0u2TOOE_400x400.jpg" alt="Isaiah's profile picture">
   <a href="https://x.com/IsaiahSrc">Isaiah</a>
