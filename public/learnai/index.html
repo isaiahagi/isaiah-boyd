@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="a personal guide to ai, vibe coding and game development.">
+  <title>Learn AI</title>
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/vcr-osd-mono">
+  <style>
+    :root { color-scheme: light dark; --bg: light-dark(#fff, #151515); --text: light-dark(#222, #e8e8e8); --muted: light-dark(#666, #aaa); --line: light-dark(#ddd, #383838); --link: light-dark(#2459ad, #9abfff); }
+    :root[data-theme="light"] { color-scheme: light; }
+    :root[data-theme="dark"] { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 "Times New Roman", Times, serif; }
+    .page { max-width: 740px; margin: 0 auto; padding: 32px 24px 64px; }
+    .by { display: flex; align-items: center; gap: 6px; } .by img { width: 24px; height: 24px; border-radius: 50%; } .by svg { width: 16px; height: 16px; }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--muted); font-size: 14px; }
+    button { font: inherit; color: inherit; background: none; border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+    h1, h2, h3 { line-height: 1.3; }
+    h1 { font-size: 32px; margin: 40px 0 16px; letter-spacing: -.035em; }
+    h2 { font-size: 20px; margin: 0 0 16px; letter-spacing: -.02em; }
+    h3 { font-size: 16px; margin: 24px 0 8px; }
+    p { margin: 0 0 12px; }
+    ul, ol { padding-left: 22px; margin: 8px 0 16px; }
+    li { margin: 3px 0; }
+    a { color: var(--link); text-underline-offset: 3px; overflow-wrap: anywhere; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
+    nav, section { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+    nav h2 { font-size: 16px; }
+    nav ol { columns: 2; column-gap: 36px; }
+    nav li { break-inside: avoid; }
+    blockquote { margin: 12px 0; padding: 4px 0 4px 14px; border-left: 2px solid var(--line); }
+    footer { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 14px; }
+    @media (max-width: 540px) { .page { padding: 24px 20px 48px; } nav ol { columns: 1; } h1 { margin-top: 32px; } }
+    /* titles: VCR OSD Mono with CRT scanlines, no glow */
+    h1, h2 { font-family: "VCR OSD Mono", monospace; font-weight: 400; letter-spacing: 2px; }
+    h1, h2, nav h2 { background: repeating-linear-gradient(var(--text) 0 2px, color-mix(in srgb, var(--text) 55%, var(--bg)) 2px 3px); -webkit-background-clip: text; background-clip: text; color: transparent; width: fit-content; max-width: 100%; }
+    @media (forced-colors: active), print { h1, h2 { background: none; color: var(--text); } }
+  </style>
+  <script>
+    try {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+    } catch {}
+  </script>
+</head>
+<body>
+<div class="page" id="top">
+  <header>
+    <button id="theme" type="button" hidden>switch theme</button>
+    <div class="by">
+  made by <img src="https://pbs.twimg.com/profile_images/2125540510836146176/y0u2TOOE_400x400.jpg" alt="Isaiah's profile picture">
+  <a href="https://x.com/IsaiahSrc">Isaiah</a>
+  <svg viewBox="0 0 22 22" role="img" aria-label="Verified account"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>
+</div>
+  </header>
+  <main>
+    <h1>Learn AI</h1>
+<p>here's a full guide on how to learn ai based off of <mark>what i use it for and how i use it</mark>. this is mainly for people who want to get into vibe coding, work on games, websites, software, etc.</p>
+<p>i'll probably throw in some add-ons here and there whenever something new comes out, so don't mind haha.</p>
+    <nav aria-labelledby="contents-heading">
+      <h2 id="contents-heading">Contents</h2>
+      <ol>
+  <li><a href="#claude-code">Anthropic — Claude Code</a></li>
+  <li><a href="#codex">OpenAI — Codex</a></li>
+  <li><a href="#other-agents">Other Coding Agents</a></li>
+  <li><a href="#models">AI Models</a></li>
+  <li><a href="#benchmarks">AI Benchmarks</a></li>
+  <li><a href="#plans">AI Plans and Subscriptions</a></li>
+  <li><a href="#local-ai">Local AI</a></li>
+  <li><a href="#reasoning">Reasoning Effort</a></li>
+  <li><a href="#context">Context Windows</a></li>
+  <li><a href="#prompts">Prompt Engineering</a></li>
+  <li><a href="#games">Vibe Coding Games</a></li>
+  <li><a href="#github">GitHub and Version Control</a></li>
+  <li><a href="#up-to-date">How Do I Stay Up to Date With AI?</a></li>
+  <li><a href="#final-thoughts">Final Thoughts</a></li>
+      </ol>
+    </nav>
+<section id="claude-code">
+  <h2>Anthropic — Claude Code</h2>
+  <h3>what is claude code?</h3>
+  <p>claude code is basically a <mark>coding agent made by anthropic that has access to your project</mark>. instead of going on claude's website and constantly copying and pasting code, claude code can directly work on your project, run commands, fix bugs, create files, etc.</p>
+  <p>this is what i mainly use for working on games and other projects.</p>
+  <h3>what plan do i get?</h3>
+  <p>depends on what you're using claude for.</p>
+  <p>if you're just working on small projects or trying to learn how to vibe code, <mark>claude pro should be fine</mark>.</p>
+  <p>if you're trying to spend an entire month working on a game without constantly worrying about usage, i'd recommend looking into claude max 5x.</p>
+  <p>it really depends on what models you're using, what reasoning effort you're using and how much you're actually working.</p>
+  <p><mark>don't go spending $200 on an ai plan when you don't even know what you're going to use it for</mark> lmao.</p>
+  <h3>what models do i use?</h3>
+  <ul>
+  <li><strong>opus:</strong> mainly for working on bigger projects, complicated systems, debugging, planning, etc.</li>
+  <li><strong>sonnet:</strong> pretty good for normal coding tasks and not wasting as much usage on smaller things.</li>
+  <li><strong>haiku:</strong> i'd mainly use this for extremely simple tasks.</li>
+</ul>
+  <p><mark>you don't need to use opus on high reasoning just to change the color of a button.</mark></p>
+  <p><strong>resources:</strong></p>
+  <p class="links"><a href="https://claude.com/">https://claude.com/</a><br>
+<a href="https://claude.com/product/claude-code">https://claude.com/product/claude-code</a></p>
+</section>
+
+<section id="codex">
+  <h2>OpenAI — Codex</h2>
+  <p>codex is another coding agent, but it's made by openai.</p>
+  <p>i'd recommend trying out codex if you already have a chatgpt subscription since you might already have access to it.</p>
+  <p>something you can also do is <mark>have claude work on something and then have codex review what claude did</mark>, find bugs, fix stuff, etc.</p>
+  <p>you don't have to be dedicated to one ai company. just use whatever actually works better for what you're doing.</p>
+  <p><strong>resource:</strong></p>
+  <p class="links"><a href="https://chatgpt.com/codex">https://chatgpt.com/codex</a></p>
+</section>
+
+<section id="other-agents">
+  <h2>Other Coding Agents</h2>
+  <p>there's a lot more coding agents than just claude code and codex.</p>
+  <h3>some i'd recommend looking into</h3>
+  <ul>
+  <li>opencode</li>
+  <li>cursor</li>
+  <li>gemini cli</li>
+  <li>github copilot</li>
+</ul>
+  <p>opencode is pretty interesting because <mark>you can use multiple ai providers under one coding agent</mark>. you can also connect your own local models to it through something like ollama.</p>
+  <p>if you're someone who likes experimenting with different models like i do, i'd definitely look into opencode.</p>
+  <p><strong>resource:</strong></p>
+  <p class="links"><a href="https://opencode.ai/">https://opencode.ai/</a></p>
+</section>
+
+<section id="models">
+  <h2>AI Models</h2>
+  <p>for people who don't understand the difference between an ai model and a coding agent:</p>
+  <p><mark>claude code is the coding agent, opus is the model.</mark></p>
+  <p>the coding agent is what gives the model access to tools and allows it to actually work on your project.</p>
+  <p>here's some ai companies and model families i'd recommend looking into.</p>
+  <ul>
+  <li>anthropic: opus, sonnet, haiku</li>
+  <li>openai: gpt</li>
+  <li>google: gemini, gemma</li>
+  <li>alibaba: qwen</li>
+  <li>deepseek: deepseek</li>
+  <li>z.ai: glm</li>
+  <li>moonshot ai: kimi</li>
+  <li>meta: llama and muse</li>
+  <li>mistral ai: mistral</li>
+</ul>
+  <p>there's a lot more than this, but these are some good ones to start researching.</p>
+  <p>also, just because you've never heard of a model doesn't mean it's bad. there's some really good models outside of openai and anthropic.</p>
+</section>
+
+<section id="benchmarks">
+  <h2>AI Benchmarks</h2>
+  <h3>how do i know which model is better?</h3>
+  <p><a href="https://artificialanalysis.ai/">https://artificialanalysis.ai/</a></p>
+  <p>i use artificial analysis to look at models, compare benchmarks, intelligence, coding capabilities, speed, pricing, etc.</p>
+  <p>some stuff you should look into:</p>
+  <ul>
+  <li>intelligence index</li>
+  <li>coding agent index</li>
+  <li>swe-bench</li>
+  <li>terminal-bench</li>
+  <li>tokens per second</li>
+  <li>time to first token</li>
+  <li>context window</li>
+</ul>
+  <p>don't just look at the #1 model on a benchmark and assume it's going to be the best at everything.</p>
+  <p>a model could perform insanely well on a benchmark and still do a terrible job working on your specific project.</p>
+  <p><mark>actually test the models yourself.</mark></p>
+</section>
+
+<section id="plans">
+  <h2>AI Plans and Subscriptions</h2>
+  <h3>what ai plans should i get?</h3>
+  <p>here's what i'd personally look into depending on what you're doing.</p>
+  <h3>just getting started</h3>
+  <ul>
+  <li>free ai models</li>
+  <li>free usage on coding agents</li>
+  <li>local ai models</li>
+</ul>
+  <h3>working on small to medium projects</h3>
+  <ul>
+  <li>claude pro</li>
+  <li>chatgpt plus</li>
+  <li>google ai pro</li>
+</ul>
+  <h3>working on bigger projects daily</h3>
+  <ul>
+  <li>claude max 5x</li>
+  <li>higher-usage plans</li>
+  <li>multiple ai providers if you can afford it</li>
+</ul>
+  <p><mark>you don't need all of these subscriptions at once</mark> btw.</p>
+  <p>look at the actual usage you're getting out of your current plan before deciding to upgrade.</p>
+  <p>also check the official pricing pages since ai companies are constantly changing their plans and usage limits.</p>
+</section>
+
+<section id="local-ai">
+  <h2>Local AI</h2>
+  <p>something i feel like a lot of people don't know is that <mark>you can literally run ai models on your own computer</mark>.</p>
+  <p>you don't necessarily need to pay for an ai subscription to use ai.</p>
+  <p>i'd recommend getting ollama or lm studio if you're interested in experimenting with local models.</p>
+  <h3>what models should i look into?</h3>
+  <ul>
+  <li>qwen</li>
+  <li>gemma</li>
+  <li>deepseek</li>
+  <li>glm</li>
+  <li>llama</li>
+  <li>mistral</li>
+</ul>
+  <p>obviously, <mark>what models you can run depends on your pc specs</mark>.</p>
+  <p>you can't just download a massive model and expect it to run smoothly on a computer with 8gb of ram.</p>
+  <h3>what does 4b, 8b, 14b, etc. mean?</h3>
+  <p>the <mark>b stands for billion parameters</mark>.</p>
+  <p>an 8b model has approximately 8 billion parameters.</p>
+  <p>more parameters doesn't always mean the model is smarter. architecture, training data, quantization and a bunch of other stuff matter too.</p>
+  <h3>what is quantization?</h3>
+  <p>you'll probably see stuff like q4, q5, q8 and gguf when looking into local models.</p>
+  <p>quantization basically <mark>reduces the precision of the model's weights so it doesn't require as much memory</mark> to run.</p>
+  <p>gguf is a file format commonly used for running local models.</p>
+  <p>if you don't have a dedicated gpu, i'd recommend experimenting with smaller quantized models first.</p>
+  <p><strong>resources:</strong></p>
+  <p class="links"><a href="https://ollama.com/">https://ollama.com/</a><br>
+<a href="https://lmstudio.ai/">https://lmstudio.ai/</a><br>
+<a href="https://huggingface.co/models">https://huggingface.co/models</a></p>
+</section>
+
+<section id="reasoning">
+  <h2>Reasoning Effort</h2>
+  <p>depending on what model you're using, you might have different reasoning levels.</p>
+  <ul>
+  <li>low</li>
+  <li>medium</li>
+  <li>high</li>
+  <li>extra high (xhigh)</li>
+</ul>
+  <p>higher reasoning effort generally allows the model to spend more time reasoning through your task.</p>
+  <p><mark>that doesn't mean you should constantly be using xhigh for everything.</mark></p>
+  <p>if you're working on a complicated multiplayer system or trying to figure out why something in your game is extremely buggy, higher reasoning might be useful.</p>
+  <p>if you're just changing some text on a ui, there's really no reason to waste that much usage.</p>
+</section>
+
+<section id="context">
+  <h2>Context Windows</h2>
+  <p>you'll probably hear a lot of people talking about context windows when new models come out.</p>
+  <p>a context window is basically <mark>how much information the model can process within an interaction</mark>.</p>
+  <p>this includes your messages, code, files, tool outputs, etc.</p>
+  <p>just because a model has a massive context window doesn't mean you should throw your entire project at it and expect it to understand everything perfectly.</p>
+  <p>keep your conversations organized and start new sessions when necessary.</p>
+  <p>i'd also recommend <mark>having documentation inside your project</mark> so your coding agent can understand what you've been working on without having to explain everything again.</p>
+</section>
+
+<section id="prompts">
+  <h2>Prompt Engineering</h2>
+  <p><mark>please actually explain what you want your ai to do.</mark></p>
+  <p>one of the biggest mistakes i see people make is giving claude a prompt like:</p>
+  <blockquote>"make me a basketball game."</blockquote>
+  <p>and then getting mad when the game looks terrible.</p>
+  <p>tell the model what you're working on, what systems you want implemented, what platform you're developing for, how you want everything to look, etc.</p>
+  <h3>stuff i'd include in my prompts</h3>
+  <ul>
+  <li>what i'm trying to accomplish.</li>
+  <li>what needs to be implemented.</li>
+  <li>what needs to be fixed.</li>
+  <li>visual references.</li>
+  <li>what the ai shouldn't touch.</li>
+  <li>how the ai should test its work.</li>
+</ul>
+  <p>i use a lot of <mark>images and videos as references</mark> whenever i'm working on ui, environments, player models, etc.</p>
+  <p>especially when working on games, don't expect ai to just know exactly what you're imagining.</p>
+  <p>if something looks bad, <mark>explain why it looks bad</mark> rather than constantly telling the ai to redo it.</p>
+  <p>you'll probably save yourself a decent amount of usage doing this too.</p>
+</section>
+
+<section id="games">
+  <h2>Vibe Coding Games</h2>
+  <p>if you're trying to get into game development using ai, here's some stuff i'd recommend looking into.</p>
+  <h3>game engines</h3>
+  <ul>
+  <li>unity</li>
+  <li>unreal engine</li>
+  <li>godot</li>
+  <li>roblox studio</li>
+</ul>
+  <p>i mainly use unity because i work on vr games.</p>
+  <h3>other resources</h3>
+  <ul>
+  <li>blender — 3d modeling.</li>
+  <li>fab — game assets, environments, materials, etc.</li>
+  <li>unity asset store — unity assets and systems.</li>
+  <li>github — open-source projects and version control.</li>
+</ul>
+  <p>don't make ai generate literally every single thing in your game.</p>
+  <p>there's already a bunch of resources available online that you can use, assuming the license allows you to.</p>
+  <p>also, <mark>please test your game yourself.</mark></p>
+  <p>claude could tell you that it fixed something, built your game successfully and that everything is working perfectly, just for you to get on the game and realize half the stuff doesn't work properly lmao.</p>
+  <p><mark>a successful build doesn't mean your game is bug-free.</mark></p>
+  <p>work on individual systems rather than trying to make an entire game in one prompt.</p>
+  <h3>for example, if you're making a basketball vr game</h3>
+  <ol>
+  <li>player rig and movement.</li>
+  <li>basketball physics.</li>
+  <li>gripping and dribbling.</li>
+  <li>shooting mechanics.</li>
+  <li>multiplayer.</li>
+  <li>ui and environments.</li>
+  <li>optimization.</li>
+</ol>
+  <p>get the actual gameplay working before worrying about a bunch of unnecessary features.</p>
+</section>
+
+<section id="github">
+  <h2>GitHub and Version Control</h2>
+  <p>please learn how to use github if you're going to vibe code.</p>
+  <p>there will eventually be a point where your coding agent completely breaks something that was working perfectly fine before.</p>
+  <p>having version control allows you to go back to previous versions of your project rather than spending another 2 hours trying to fix something that didn't need fixing in the first place.</p>
+  <h3>some stuff you should learn</h3>
+  <ul>
+  <li>repositories</li>
+  <li>commits</li>
+  <li>branches</li>
+  <li>pull requests</li>
+  <li>merging</li>
+  <li>reverting</li>
+</ul>
+  <p><mark>always commit your project before asking ai to make a massive change.</mark></p>
+  <p>also, <mark>don't be uploading your api keys and passwords to public repositories.</mark></p>
+  <p><strong>resource:</strong></p>
+  <p class="links"><a href="https://github.com/">https://github.com/</a></p>
+</section>
+
+<section id="up-to-date">
+  <h2>How Do I Stay Up to Date With AI?</h2>
+  <p>x (twitter).</p>
+  <p>a lot of the information i get about ai comes from x. new model releases, benchmarks, research, coding agents, leaks, etc.</p>
+  <p>i'd recommend following ai companies, researchers, engineers and other people who are actually involved in the ai space.</p>
+  <p><strong>some accounts i'd recommend:</strong></p>
+  <p class="links"><a href="https://x.com/OpenAI">@OpenAI</a><br>
+<a href="https://x.com/AnthropicAI">@AnthropicAI</a><br>
+<a href="https://x.com/GoogleDeepMind">@GoogleDeepMind</a><br>
+<a href="https://x.com/huggingface">@huggingface</a><br>
+<a href="https://x.com/ArtificialAnlys">@ArtificialAnlys</a></p>
+  <p><strong>you can also use:</strong></p>
+  <p class="links"><a href="https://artificialanalysis.ai/">https://artificialanalysis.ai/</a><br>
+<a href="https://huggingface.co/">https://huggingface.co/</a><br>
+<a href="https://github.com/">https://github.com/</a><br>
+<a href="https://arxiv.org/">https://arxiv.org/</a></p>
+  <p>don't believe every random benchmark or model leak you see on x either. people post some ridiculous stuff on there sometimes.</p>
+  <p><mark>ai moves extremely fast.</mark> the model you're using today could be completely outperformed by another model a few months from now.</p>
+  <p>just stay updated and experiment with stuff.</p>
+</section>
+
+<section id="final-thoughts">
+  <h2>Final Thoughts</h2>
+  <p>you don't need to know everything about ai to start working on projects.</p>
+  <p>i'm still learning a bunch of stuff myself, and that's partially why i'm making this document.</p>
+  <p>don't be afraid to experiment with different models, coding agents, local ai, etc.</p>
+  <p>also, <mark>try to actually learn what your ai is doing</mark> rather than just accepting every single thing it does.</p>
+  <p>you don't need to be some senior software engineer to make something cool, but understanding your own project will save you from a lot of problems later on.</p>
+  <p><mark>just build stuff, learn from it and keep going.</mark></p>
+  <p>— isaiah boyd</p>
+</section>
+  </main>
+  <footer><a href="#top">back to top ↑</a></footer>
+</div>
+<script>
+  const button = document.querySelector('#theme');
+  const root = document.documentElement;
+  const preference = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || (preference.matches ? 'dark' : 'light');
+  function update() { button.textContent = current() === 'dark' ? 'light mode' : 'dark mode'; }
+  button.addEventListener('click', () => {
+    root.dataset.theme = current() === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+    update();
+  });
+  preference.addEventListener('change', update);
+  update();
+  button.hidden = false;
+</script>
+</body>
+</html>
