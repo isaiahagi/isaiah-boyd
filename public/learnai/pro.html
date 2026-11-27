@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="tools for people who already use ai: 3d, agents, training and local models.">
+  <title>Learn AI Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // set the saved theme before the page draws
+    try {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+    } catch {}
+  </script>
+</head>
+<body>
+<details id="side" open>
+  <summary>Contents</summary>
+  <nav aria-label="Contents">
+    <a class="brand" href="#top">Learn AI Pro</a>
+    <p>Get Started</p>
+    <a href="#top">Introduction</a>
+    <p>Tools</p>
+    <a href="#models-3d">3D Assets and 3D Modeling</a>
+    <a href="#free-3d">Free 3D Models for Your AI</a>
+    <a href="#agents">How to Maintain Subagents and Agents</a>
+    <p>Models</p>
+    <a href="#benchmarks">Live Benchmarks</a>
+    <a href="#training">Training LLMs on Your Computer or Home Server</a>
+    <a href="#local">Why Local AI Can Compete With AI Plans</a>
+  </nav>
+</details>
+<div class="page" id="top">
+  <header>
+    <button id="theme" type="button" hidden>switch theme</button>
+    <p class="ask">more questions? dm me on discord <strong>@isaiahbd</strong>, i'm happy to answer questions about AI/LLMs or anything.</p>
+    <div class="by">
+  made by <img src="https://pbs.twimg.com/profile_images/2125540510836146176/y0u2TOOE_400x400.jpg" alt="Isaiah's profile picture">
+  <a href="https://x.com/IsaiahSrc">Isaiah</a>
+  <svg viewBox="0 0 22 22" role="img" aria-label="Verified account"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>
+</div>
+  </header>
+  <main>
+    <h1>Learn AI Pro</h1>
+<p>this one is for people who are already good at using ai and just need help with what tools to use. no beginner stuff here.</p>
+<p>new to all of this? start here instead.</p>
+<p><a class="button" href="./">main guide</a> <a class="button" href="#benchmarks">live benchmarks</a></p>
+<section id="models-3d">
+  <h2>3D Assets and 3D Modeling</h2>
+  <p>this is a job where you can pull in these models.</p>
+  <h3>paid</h3>
+  <ul>
+  <li>opus 5.5</li>
+  <li>sonnet 5.5</li>
+  <li>gpt 6.2 astra</li>
+  <li>gemini 4 neon</li>
+  </ul>
+  <h3>local</h3>
+  <ul>
+  <li>inkling 2 small</li>
+  <li>glm-5.3-flash</li>
+  </ul>
+  <p>"local" here means the weights are open, not that they'll run on any pc. both are huge mixture-of-experts models, and even compressed versions need well over 100gb of memory. check the model card before you download anything.</p>
+  <h3>what i use</h3>
+  <p><mark>opus 5.5, gpt 6.2 sol and gemini 4 neon, alongside glm-5.3-flash, depending on the task.</mark></p>
+</section>
+
+<section id="free-3d">
+  <h2>Free 3D Models for Your AI</h2>
+  <p>if you need help on 3d models, send this to your ai:</p>
+  <blockquote><code>use https://fab.com to find free models for this project. prefer polished, low poly assets, and check each license and triangle count before using one.</code></blockquote>
+  <p><mark>fab will let you get hella free models that are polished, low poly and more.</mark> starting from a good asset usually beats generating everything from scratch.</p>
+  <p class="links"><a href="https://fab.com">https://fab.com</a></p>
+</section>
+
+<section id="agents">
+  <h2>How to Maintain Subagents and Agents</h2>
+  <p>an agent is the thing doing your task. a subagent is a helper it hands a smaller job to, with its own context window, so your main session doesn't fill up with noise.</p>
+  <h3>setting one up</h3>
+  <p>in claude code, a subagent is a markdown file. put it in <code>.claude/agents/</code> for one project, or <code>~/.claude/agents/</code> for all of them.</p>
+  <pre><code>---
+name: code-reviewer
+description: use after code changes to find bugs. read only.
+tools: Read, Grep, Glob
+model: sonnet
+---
+review the changes. report real bugs with the file and line.
+don't edit anything.</code></pre>
+  <h3>keeping them useful</h3>
+  <ul>
+  <li><strong>one job each.</strong> a reviewer reviews, a researcher researches.</li>
+  <li><strong>write a clear description.</strong> it's how the main agent decides when to use it.</li>
+  <li><strong>limit the tools.</strong> if it only needs to read, don't let it edit.</li>
+  <li><strong>match the model to the job.</strong> save the expensive ones for the hard stuff.</li>
+  <li><strong>update them when they mess up.</strong> add the rule that would have prevented it.</li>
+  <li><strong>delete the ones you never use.</strong></li>
+  <li><strong>keep them in git,</strong> so you can see what changed and roll it back.</li>
+  </ul>
+  <p><mark>don't spawn a bunch of agents for something one agent can do.</mark> more agents means more usage and more output to check.</p>
+  <p class="links"><a href="https://code.claude.com/docs/en/sub-agents">https://code.claude.com/docs/en/sub-agents</a></p>
+</section>
+
+<section id="benchmarks">
+  <h2>Live Benchmarks</h2>
+  <p>numbers come from <a href="https://artificialanalysis.ai/">artificial analysis</a>. tap a button to sort, or search for a model.</p>
+  <input id="search" type="search" placeholder="search models or companies" aria-label="search models or companies" hidden>
+  <div class="sorts" hidden>
+    <button type="button" data-sort="intelligence" aria-pressed="true">smartest</button>
+    <button type="button" data-sort="speed" aria-pressed="false">fastest</button>
+    <button type="button" data-sort="price" aria-pressed="false">cheapest</button>
+  </div>
+  <div class="table" hidden>
+    <table>
+      <thead><tr><th>model</th><th>intelligence</th><th>tokens/sec</th><th>$ in / 1m</th><th>$ out / 1m</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p id="bench-status" role="status">loading benchmarks...</p>
+  <p><a class="button" href="https://artificialanalysis.ai/">full leaderboard</a> <a class="button" href="https://artificialanalysis.ai/data-api/docs#overview-hero">data api docs</a></p>
+</section>
+
+<section id="training">
+  <h2>Training LLMs on Your Computer or Home Server</h2>
+  <p><mark>i train llms on my home server.</mark> if you want to get into it, here's where i'd point you.</p>
+  <h3>fine-tune, don't start from zero</h3>
+  <p>training a model from scratch takes a ridiculous amount of data and compute. fine-tuning takes an existing open model and teaches it your style or task, which is far more realistic at home. lora and qlora only train a small set of extra weights, so they need much less memory.</p>
+  <h3>tools to look into</h3>
+  <p class="links"><a href="https://github.com/unslothai/unsloth">https://github.com/unslothai/unsloth</a><br>
+<a href="https://github.com/axolotl-ai-cloud/axolotl">https://github.com/axolotl-ai-cloud/axolotl</a><br>
+<a href="https://huggingface.co/docs/trl">https://huggingface.co/docs/trl</a></p>
+  <h3>a simple process</h3>
+  <ol>
+  <li>pick a small base model that fits your gpu, and check its license.</li>
+  <li>build a clean dataset. a few hundred good examples beat thousands of messy ones.</li>
+  <li>set some examples aside that the model never trains on.</li>
+  <li>run a short test first, then the full run.</li>
+  <li>compare it against the base model on those held-out examples.</li>
+  <li>export it, to gguf for example, and run it in ollama or lm studio.</li>
+  </ol>
+  <h3>before you leave it running</h3>
+  <ul>
+  <li>vram is usually the first limit you'll hit.</li>
+  <li>save checkpoints, so a crash doesn't cost you the whole run.</li>
+  <li>watch your temperatures and power usage.</li>
+  <li>don't train on private data or keys you wouldn't want the model repeating.</li>
+  </ul>
+</section>
+
+<section id="local">
+  <h2>Why Local AI Can Compete With AI Plans</h2>
+  <p>paid models are still really strong, especially on long, complicated tasks. local ai doesn't need to win everything to be worth it.</p>
+  <ul>
+  <li><strong>no usage limits.</strong> run it as much as your hardware can handle.</li>
+  <li><strong>privacy.</strong> your code and files can stay on your own machine.</li>
+  <li><strong>it works offline,</strong> and nobody can change or retire the model you downloaded.</li>
+  <li><strong>you can fine-tune it</strong> on your own stuff.</li>
+  <li><strong>cost over time.</strong> there's no monthly bill, but hardware and electricity aren't free.</li>
+  </ul>
+  <p><mark>my advice: let local models handle the repetitive work, and bring in a paid model when the local one gets stuck.</mark></p>
+  <p>test both on your own project before cancelling a plan or buying a new gpu.</p>
+</section>
+  </main>
+  <footer><a class="button" href="#top">back to top ↑</a></footer>
+</div>
+<div id="wheel" aria-hidden="true"><div id="thumb"></div></div>
+<script src="app.js"></script>
+<script src="benchmarks.js"></script>
+</body>
+</html>

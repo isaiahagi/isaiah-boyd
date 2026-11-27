@@ -8,7 +8,13 @@
     "run_worker_first": true
   },
   "durable_objects": {
-    "bindings": [{ "name": "VISITORS", "class_name": "VisitorCounter" }]
+    "bindings": [
+      { "name": "VISITORS", "class_name": "VisitorCounter" },
+      { "name": "BENCHMARKS", "class_name": "Benchmarks" }
+    ]
   },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["VisitorCounter"] }]
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["VisitorCounter"] },
+    { "tag": "v2", "new_sqlite_classes": ["Benchmarks"] }
+  ]
 }
