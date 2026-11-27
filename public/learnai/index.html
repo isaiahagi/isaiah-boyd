@@ -62,6 +62,8 @@
       #side summary { display: none; }
       #side .brand { display: block; position: sticky; top: 0; z-index: 1; margin: 0 -10px; padding: 14px 18px; border-radius: 0; border-bottom: 1px solid var(--line); background: var(--bg); color: var(--text); font: 17px "VCR OSD Mono", monospace; letter-spacing: 2px; }
     }
+    h1:has(+ #visitors:not([hidden])) { margin-bottom: 4px; }
+    #visitors { color: var(--muted); font-size: 14px; margin-bottom: 16px; font-variant-numeric: tabular-nums; }
     @media print { #side { display: none; } body { padding: 0; } }
   </style>
   <script>
@@ -114,6 +116,7 @@
   </header>
   <main>
     <h1>Learn AI</h1>
+    <p id="visitors" hidden></p>
 <p>here's a full guide on how to learn ai based off of <mark>what i use it for and how i use it</mark>. this is mainly for people who want to get into vibe coding, work on games, websites, software, etc.</p>
 <p>i'll probably throw in some add-ons here and there whenever something new comes out, so don't mind haha.</p>
 <section id="claude-code">
@@ -561,6 +564,28 @@
     new ResizeObserver(queue).observe(document.body);
     root.classList.add('has-wheel');
     draw();
+  })();
+</script>
+<script>
+  (() => {
+    const line = document.getElementById('visitors');
+    let counted = false;
+    // shows only the number the server returns; stays hidden if it can't be reached
+    async function refresh() {
+      if (document.hidden) return;
+      try {
+        const res = await fetch('/api/visitors', { method: counted ? 'GET' : 'POST' });
+        if (!res.ok) return;
+        const { count } = await res.json();
+        if (!Number.isInteger(count)) return;
+        counted = true;
+        line.textContent = `${count.toLocaleString('en-US')} ${count === 1 ? 'Visitor' : 'Visitors'}`;
+        line.hidden = false;
+      } catch {}
+    }
+    refresh();
+    setInterval(refresh, 15000);
+    document.addEventListener('visibilitychange', refresh);
   })();
 </script>
 </body>
