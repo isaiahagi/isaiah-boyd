@@ -204,6 +204,12 @@ there's two ways to do this: generate the mesh, or have a coding agent build it 
 
 hook a coding agent up to blender through mcp. [my model picks are on the pro page](pro#models-3d).
 
+### my blender skill
+
+i made a claude skill for this: [cartoon-3d-model](https://github.com/isaiahagi/cartoon-3d-model). ask for a cartoon 3d model and claude writes a blender script, renders previews, fixes what looks wrong and exports game-ready files. you need blender 4.x and claude code, or another claude app that can run commands on your computer.
+
+https://github.com/isaiahagi/cartoon-3d-model
+
 whatever you use, **check the triangle count, scale and textures** before putting it in your game.
 
 https://www.meshy.ai/

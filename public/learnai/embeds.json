@@ -238,5 +238,10 @@
     "title": "Blender",
     "description": "free and open source 3d creation software.",
     "image": ""
+  },
+  "https://github.com/isaiahagi/cartoon-3d-model": {
+    "title": "GitHub - isaiahagi/cartoon-3d-model: Claude skill: make cartoon-style, game-ready 3D models with scripted Blender",
+    "description": "Claude skill: make cartoon-style, game-ready 3D models with scripted Blender - isaiahagi/cartoon-3d-model",
+    "image": "https://opengraph.githubassets.com/d962914a23cc5a1dc8fb7e2eb68e397c117feaa183041b40ec8ce8f09136d785/isaiahagi/cartoon-3d-model"
   }
 }
