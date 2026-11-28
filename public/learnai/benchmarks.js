@@ -1,10 +1,9 @@
 // benchmark table on the pro page
 (() => {
-  const section = document.getElementById('benchmarks');
   const status = document.getElementById('bench-status');
   const search = document.getElementById('search');
-  const sorts = section.querySelector('.sorts');
-  const table = section.querySelector('.table');
+  const sorts = document.querySelector('.sorts');
+  const table = document.querySelector('.table');
   let models = [], sort = 'intelligence';
 
   const order = {

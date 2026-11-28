@@ -4,7 +4,8 @@
   "description": "Source for isaiahboyd.xyz",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/learnai.mjs && next build",
+    "learnai": "node scripts/learnai.mjs",
     "typecheck": "next typegen && tsc --noEmit",
     "preview": "wrangler dev",
     "deploy": "wrangler deploy"

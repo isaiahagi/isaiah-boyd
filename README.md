@@ -17,13 +17,18 @@ npm run dev
 
 Everything on the home page is in [`lib/content.ts`](lib/content.ts).
 
+Learn AI is written in `public/learnai/index.md` and `pro.md`. A line that starts with a bare URL becomes
+a link preview card. After adding a link, run `npm run learnai -- --embeds` to save its preview to
+`embeds.json`, then commit that file.
+
 ## Structure
 
 ```
 app/          layout, home page, 404, share image, global styles
 components/   Discord profile
 lib/          page content
-public/       images, and the Learn AI guide in public/learnai (plain HTML)
+public/       images, and the Learn AI guide in public/learnai (markdown)
+scripts/      builds the Learn AI pages from the markdown
 worker.js     visitor counter, benchmarks API and the learnai subdomain
 ```
 

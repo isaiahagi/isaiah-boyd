@@ -1,0 +1,242 @@
+{
+  "https://claude.com/": {
+    "title": "Claude by Anthropic | The AI for problem solvers",
+    "description": "Claude is an AI assistant built by Anthropic and designed to be helpful, honest, and harmless, so you can do your best work.",
+    "image": "https://assets.claude.com/f66071070c4701ea2c37fc01b3c0f83623cf29d3.jpg?w=2400&h=1260&fit=crop"
+  },
+  "https://claude.com/product/claude-code": {
+    "title": "Claude Code by Anthropic | AI coding agent and assistant",
+    "description": "Claude Code understands your codebase, edits files, runs commands, and helps you ship faster. It’s Anthropic’s agentic coding tool for your terminal and IDE.",
+    "image": "https://assets.claude.com/f66071070c4701ea2c37fc01b3c0f83623cf29d3.jpg?w=2400&h=1260&fit=crop"
+  },
+  "https://chatgpt.com/codex": {
+    "title": "Codex in ChatGPT | AI Coding Agents for Software Engineering",
+    "description": "Codex in ChatGPT helps engineering teams build faster with AI coding agents. Complete pull requests, refactors, code reviews, automations, and more across parallel workflows.",
+    "image": "https://images.ctfassets.net/8su2tbn87fck/1AFmJlFiOIpmqlLkWyw9oR/2a2e9319ad785a14078b6c6e5f650269/codex-og-image.png?w=1600&h=900&fit=fill"
+  },
+  "https://opencode.ai/": {
+    "title": "OpenCode | The open source coding agent for any model",
+    "description": "OpenCode is the open source coding agent that works where you do. Connect AI models from 200+ providers, including Claude, GPT and Gemini, or start free.",
+    "image": "https://opencode.ai/files/site/og/home-98637499f6.png"
+  },
+  "https://code.claude.com/docs/en/skills": {
+    "title": "Extend Claude with skills - Claude Code Docs",
+    "description": "Create, manage, and share skills to extend Claude's capabilities in Claude Code. Includes custom commands and bundled skills.",
+    "image": "https://claude-code.mintlify.site/docs/_mintlify/api/og/v2?division=Skills&title=Extend+Claude+with+skills&description=Create%2C+manage%2C+and+share+skills+to+extend+Claude%27s+capabilities+in+Claude+Code.+Includes+custom+commands+and+bundled+skills.&theme=e2d30309a4005a9870b526a1&signature=216f9b17dc1c04cde9ad3423bcee51ae575f2918077fb2003e87cfa94eef1b7d"
+  },
+  "https://code.claude.com/docs/en/plugins": {
+    "title": "Plugins overview - Claude Code Docs",
+    "description": "Understand what a Claude Code plugin is, when you need one instead of a standalone skill or MCP server, and which page to read to install or create one.",
+    "image": "https://claude-code.mintlify.site/docs/_mintlify/api/og/v2?division=Plugins&title=Plugins+overview&description=Understand+what+a+Claude+Code+plugin+is%2C+when+you+need+one+instead+of+a+standalone+skill+or+MCP+server%2C+and+which+page+to+read+to+install+or+create+one.&theme=e2d30309a4005a9870b526a1&signature=675fc97ae30548eb06c35c2645bac9154b0996ae52d9679854671fc8d9f9a4a9"
+  },
+  "https://registry.modelcontextprotocol.io/": {
+    "title": "Official MCP Registry",
+    "description": "",
+    "image": ""
+  },
+  "https://github.com/modelcontextprotocol/servers": {
+    "title": "GitHub - modelcontextprotocol/servers: Model Context Protocol Reference Servers",
+    "description": "Model Context Protocol Reference Servers. Contribute to modelcontextprotocol/servers development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/b2262c4259faafa09ffc905126f02ef4bc7ec6832047ce76f60c53760e8c9c23/modelcontextprotocol/servers"
+  },
+  "https://github.com/mcp": {
+    "title": "MCP Registry · Connect Agents to tools",
+    "description": "A faster, safer way to build with AI: the GitHub MCP Registry centralizes MCP servers for effortless discovery, integration, and open collaboration.",
+    "image": "https://github.githubassets.com/assets/github-mcp-registry-8a3e5775c048.png"
+  },
+  "https://smithery.ai/": {
+    "title": "Smithery · MCP servers, now part of Arcade",
+    "description": "Discover MCP servers that connect agents to thousands of tools and services.",
+    "image": "https://smithery.ai/opengraph-image.png?opengraph-image.03qkz290_z1m9.png"
+  },
+  "https://glama.ai/mcp/servers": {
+    "title": "Open-Source MCP Servers – 132,154 in the Glama Registry",
+    "description": "Everything MCP – servers updated daily. The most comprehensive registry of Model Context Protocol (MCP) servers, clients, tools, and integrations.",
+    "image": "https://glama.ai/generated-images/og?title=Open-Source+MCP+Servers+%E2%80%93+132%2C154+in+the+Glama+Registry"
+  },
+  "https://x.ai/bot": {
+    "title": "AI teammates that finish the work | Grok Bot",
+    "description": "Grok Bot is your team of always-on AI teammates. They have their own computer, use it like you do, and never log off.",
+    "image": "https://x.ai/api/og/bot?slug=%2Fbot&shape=blob&colour=violet&v=1"
+  },
+  "https://chatgpt.com/": {
+    "title": "ChatGPT",
+    "description": "",
+    "image": ""
+  },
+  "https://gemini.google/overview/image-generation/": {
+    "title": "Gemini image generation (Nano Banana)",
+    "description": "With Nano Banana 2, Gemini's AI image generator and photo editor, you can create high-quality images and edit photos into countless new creations.",
+    "image": "https://lh3.googleusercontent.com/1E500rkSh8Gqkz2l12tkrKkMgsDmbQot0h3afeiRukXNficphb2zEE8o6J3dSKkiDGOOCcQ8WtRYzEYudgiYK9FkoQeYg_SP92-C=e365-pa-nu-w1200-rj"
+  },
+  "https://github.com/Tongyi-MAI/Z-Image": {
+    "title": "GitHub - Tongyi-MAI/Z-Image",
+    "description": "Contribute to Tongyi-MAI/Z-Image development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/1b7f6cb476381053072d2a31a208aaad4cf3021f14f96234e9fe5ec51b6f2a0a/Tongyi-MAI/Z-Image"
+  },
+  "https://huggingface.co/black-forest-labs": {
+    "title": "black-forest-labs (Black Forest Labs)",
+    "description": "Org profile for Black Forest Labs on Hugging Face, the AI community building the future.",
+    "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/black-forest-labs.png"
+  },
+  "https://huggingface.co/HiDream-ai": {
+    "title": "HiDream-ai (HiDream.ai)",
+    "description": "Org profile for HiDream.ai on Hugging Face, the AI community building the future.",
+    "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/HiDream-ai.png"
+  },
+  "https://www.aseprite.org/": {
+    "title": "Aseprite",
+    "description": "Animated sprite editor & pixel art tool",
+    "image": "https://www.aseprite.org/assets/images/og-image.png"
+  },
+  "https://hyper3d.ai/": {
+    "title": "Hyper3D Rodin - Best AI 3D Model Generator",
+    "description": "Rodin generates high-quality 3D assets that are nearly production-ready for supported workflows.",
+    "image": "https://storage.deemos.dev/features/agentic/b7faa93dd63010643d74db337da0f2ee03b365ea.webp"
+  },
+  "https://github.com/microsoft/TRELLIS.2": {
+    "title": "GitHub - microsoft/TRELLIS.2: Native and Compact Structured Latents for 3D Generation",
+    "description": "Native and Compact Structured Latents for 3D Generation - microsoft/TRELLIS.2",
+    "image": "https://opengraph.githubassets.com/5d0bded5a1ba4b819b7832372930afe4960986c6f7313d1e974a95bb8b92f04e/microsoft/TRELLIS.2"
+  },
+  "https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1": {
+    "title": "GitHub - Tencent-Hunyuan/Hunyuan3D-2.1: From Images to High-Fidelity 3D Assets with Production-Ready PBR Material",
+    "description": "From Images to High-Fidelity 3D Assets with Production-Ready PBR Material - Tencent-Hunyuan/Hunyuan3D-2.1",
+    "image": "https://opengraph.githubassets.com/c863abf434616152742f36e713152835172ce4b29e2e2cf4bde8c5c84a8ef540/Tencent-Hunyuan/Hunyuan3D-2.1"
+  },
+  "https://artificialanalysis.ai/": {
+    "title": "AI Model & API Providers Analysis | Artificial Analysis",
+    "description": "Comparison and analysis of AI models and API hosting providers. Independent benchmarks across key performance metrics including quality, price, time per task & latency.",
+    "image": "https://artificialanalysis.ai/opengraph-image.png?opengraph-image.1ysagso6hjaf_.png"
+  },
+  "https://thinkingmachines.ai/news/inkling-2-mini/": {
+    "title": "Introducing Inkling 2 Mini",
+    "description": "Inkling 2 Mini is an open-weights model small enough to run on your laptop. It loops its middle layers to reason more per token and reach answers in fewer tokens.",
+    "image": "https://thinkingmachines.ai/news/inkling-2-mini/images/cover-social.png"
+  },
+  "https://huggingface.co/thinkingmachines/Inkling-2-Small": {
+    "title": "thinkingmachines/Inkling-2-Small · Hugging Face",
+    "description": "Image-Text-to-Text model with 594B parameters. Download, explore files and run it on Hugging Face.",
+    "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/models/thinkingmachines/Inkling-2-Small.png"
+  },
+  "https://ollama.com/library/qwen3.8": {
+    "title": "qwen3.8",
+    "description": "Qwen3.8 delivers substantial gains across coding, professional work, research, and long-horizon agentic tasks.",
+    "image": "https://ollama.com/public/og.png"
+  },
+  "https://ollama.com/library/gemma4": {
+    "title": "gemma4",
+    "description": "Gemma 4 models are designed to deliver frontier-level performance at each size. They are well-suited for reasoning, agentic workflows, coding, and multimodal understanding.",
+    "image": "https://ollama.com/public/og.png"
+  },
+  "https://ollama.com/": {
+    "title": "Ollama · Run AI models locally and in the cloud",
+    "description": "Run and build with open AI models locally or in the cloud on macOS, Windows, and Linux.",
+    "image": "https://ollama.com/public/og.png"
+  },
+  "https://lmstudio.ai/": {
+    "title": "LM Studio Bionic - Your Agent for Work and Code",
+    "description": "Bionic is LM Studio's agent for work and code. Create documents, slides, PDFs, and software with local or frontier open models.",
+    "image": "https://lmstudio.ai/assets/marketing/bionic/homepage-metallic-icon-light.jpg"
+  },
+  "https://huggingface.co/models": {
+    "title": "Models – Hugging Face",
+    "description": "Explore machine learning models.",
+    "image": "https://huggingface.co/front/thumbnails/models.png"
+  },
+  "https://www.brickyard.ch/": {
+    "title": "Brickyard · Build Roblox games with any AI agent",
+    "description": "One window for Claude, Codex, Gemini, OpenCode and Grok, already wired into Roblox Studio. Free and open source.",
+    "image": "https://www.brickyard.ch/og.png"
+  },
+  "https://codersocial.com/": {
+    "title": "CoderSocial — ship in public",
+    "description": "A social network for people who build. Share code, ship in public, fork what you like.",
+    "image": ""
+  },
+  "https://github.com/": {
+    "title": "GitHub · Change is constant. GitHub keeps you ahead. · GitHub",
+    "description": "Join the world's most widely adopted, AI-powered developer platform where millions of developers, businesses, and the largest open source community build software that advances humanity.",
+    "image": "https://images.ctfassets.net/8aevphvgewt8/76epZKB2wF998m4e4bLLXn/c505f20b00ec70b88b1be5aec42c4be4/OG_image.jpg"
+  },
+  "https://x.com/OpenAI": {
+    "title": "OpenAI (@OpenAI) on X",
+    "description": "OpenAI’s mission is to ensure that artificial general intelligence benefits all of humanity. We’re hiring: https://t.co/dJGr6LgzPA",
+    "image": "https://pbs.twimg.com/profile_images/1885410181409820672/ztsaR0JW_400x400.jpg"
+  },
+  "https://x.com/AnthropicAI": {
+    "title": "Anthropic (@AnthropicAI) on X",
+    "description": "We're an AI safety and research company that builds reliable, interpretable, and steerable AI systems. Talk to our AI assistant @claudeai on https://t.co/FhDI3KQh0n.",
+    "image": "https://pbs.twimg.com/profile_images/1798110641414443008/XP8gyBaY_400x400.jpg"
+  },
+  "https://x.com/GoogleDeepMind": {
+    "title": "Google DeepMind (@GoogleDeepMind) on X",
+    "description": "The engine room of @Google. Building AI safely and responsibly to solve the world’s most complex problems. Join us: https://t.co/jUHQA27iBL",
+    "image": "https://pbs.twimg.com/profile_images/1695024885070737408/-M-HSH5P_400x400.jpg"
+  },
+  "https://x.com/huggingface": {
+    "title": "Hugging Face (@huggingface) on X",
+    "description": "The AI community building the future. https://t.co/TpiXQMQ9rZ",
+    "image": "https://pbs.twimg.com/profile_images/1991559933473497089/mbrRS49P_400x400.jpg"
+  },
+  "https://x.com/ArtificialAnlys": {
+    "title": "Artificial Analysis (@ArtificialAnlys) on X",
+    "description": "Independent analysis of AI",
+    "image": "https://pbs.twimg.com/profile_images/2042402069320290304/A8C1lP07_400x400.jpg"
+  },
+  "https://huggingface.co/": {
+    "title": "Hugging Face – The AI community building the future.",
+    "description": "We’re on a journey to advance and democratize artificial intelligence through open source and open science.",
+    "image": "https://huggingface.co/front/thumbnails/v2-2.png"
+  },
+  "https://arxiv.org/": {
+    "title": "arXiv.org e-Print archive",
+    "description": "",
+    "image": ""
+  },
+  "https://fab.com": {
+    "title": "Fab",
+    "description": "Fab is a digital marketplace that offers creators a single destination to discover, share, buy and sell high quality, real-time-ready game assets, environments, VFX, audio, animations, characters, plug-ins, and more.",
+    "image": "https://static.fab.com/static/builds/web/dist/frontend/assets/images/seo/fdf942ac474b5c4825413520bb6fd4eb-v1.webp"
+  },
+  "https://code.claude.com/docs/en/sub-agents": {
+    "title": "Create custom subagents - Claude Code Docs",
+    "description": "Create and use specialized AI subagents in Claude Code for task-specific workflows and improved context management.",
+    "image": "https://claude-code.mintlify.site/docs/_mintlify/api/og/v2?division=Agents+and+parallel+work&title=Create+custom+subagents&description=Create+and+use+specialized+AI+subagents+in+Claude+Code+for+task-specific+workflows+and+improved+context+management.&theme=e2d30309a4005a9870b526a1&signature=085747cd1ddfe93a00e8d19d01f1ac85ebc19bc8421b55859a2302f85d2fa37f"
+  },
+  "https://github.com/unslothai/unsloth": {
+    "title": "GitHub - unslothai/unsloth: Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4.1, MiniMax-H3, Gemma 4, FLUX and more.",
+    "description": "Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4.1, MiniMax-H3, Gemma 4, FLUX and more. - unslothai/unsloth",
+    "image": "https://opengraph.githubassets.com/db2f148044b545a51cbf023878005071148c12d8eb41115e309a3f96b77766c7/unslothai/unsloth"
+  },
+  "https://github.com/axolotl-ai-cloud/axolotl": {
+    "title": "GitHub - axolotl-ai-cloud/axolotl: Go ahead and axolotl questions",
+    "description": "Go ahead and axolotl questions. Contribute to axolotl-ai-cloud/axolotl development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/c8f7e7c97ba14c47d283d9bbe0bf65f6baf55db83d6a346a503ec534903e62cd/axolotl-ai-cloud/axolotl"
+  },
+  "https://huggingface.co/docs/trl": {
+    "title": "TRL - Transformers Reinforcement Learning · Hugging Face",
+    "description": "We’re on a journey to advance and democratize artificial intelligence through open source and open science.",
+    "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/docs/trl/index.png"
+  },
+  "https://www.pulsemcp.com/": {
+    "title": "PulseMCP",
+    "description": "a directory of mcp servers.",
+    "image": ""
+  },
+  "https://www.meshy.ai/": {
+    "title": "Meshy",
+    "description": "ai 3d model generator for text and image to 3d.",
+    "image": ""
+  },
+  "https://www.tripo3d.ai/": {
+    "title": "Tripo",
+    "description": "ai 3d model generator for text and image to 3d.",
+    "image": ""
+  },
+  "https://www.blender.org/": {
+    "title": "Blender",
+    "description": "free and open source 3d creation software.",
+    "image": ""
+  }
+}

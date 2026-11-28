@@ -7,3 +7,6 @@ next-env.d.ts
 *.tsbuildinfo
 banners/
 .claude/
+# generated from the markdown by scripts/learnai.mjs
+public/learnai/index.html
+public/learnai/pro.html
