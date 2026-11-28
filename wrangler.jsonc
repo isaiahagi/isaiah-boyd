@@ -2,9 +2,12 @@
   "name": "isaiah-boyd",
   "compatibility_date": "2026-11-01",
   "main": "worker.js",
+  // builds the Next.js static export before every deploy
+  "build": { "command": "npm run build" },
   "assets": {
-    "directory": "./public",
+    "directory": "./out",
     "binding": "ASSETS",
+    "not_found_handling": "404-page",
     "run_worker_first": true
   },
   "durable_objects": {
