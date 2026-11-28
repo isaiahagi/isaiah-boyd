@@ -5,27 +5,16 @@ export const site = {
   url: "https://isaiahboyd.xyz",
   role: "Software engineer & game developer",
   location: "Palm Coast, Florida",
-  timeZone: "America/New_York",
   email: "contact@isaiahboyd.xyz",
   description:
     "Isaiah Boyd is a software engineer and game developer in Palm Coast, Florida, working on VR/XR games, full stack development and AI.",
 };
 
-export const sections = [
-  { id: "about", label: "About" },
-  { id: "work", label: "Work" },
-  { id: "projects", label: "Projects" },
-  { id: "stack", label: "Stack" },
-  { id: "beliefs", label: "Beliefs" },
-  { id: "writing", label: "Writing" },
-  { id: "contact", label: "Contact" },
-] as const;
-
-export type SectionId = (typeof sections)[number]["id"];
-
 export const about = [
-  "I have been shipping updates and building products for more than four years: VR games with active player communities, open-source contributions and full stack development.",
-  "Lately I spend a lot of time with AI. I build with coding agents, run local models and train language models on my own computer and home server.",
+  "From Palm Coast, Florida",
+  "Shipping updates and building products for 4+ years",
+  "I build VR games, websites and AI tools",
+  "I train language models on my own computer and home server",
 ];
 
 export type Role = {
@@ -98,7 +87,7 @@ export const projects: Entry[] = [
   },
   {
     title: "PRIMAL",
-    summary: "A VR fan game inspired by Gorilla Tag. I am its founder.",
+    summary: "A VR fan game inspired by Gorilla Tag. I founded it.",
     meta: "VR",
   },
 ];
@@ -153,4 +142,11 @@ export const socials: { label: string; handle: string; href: string }[] = [
   { label: "GitHub", handle: "isaiahagi", href: "https://github.com/isaiahagi" },
 ];
 
-export const discord = "isaiahbd";
+// shown by components/discord-profile.tsx. The other values are used if Lanyard can't be reached.
+export const discord = {
+  id: "1313630076809510975",
+  username: "isaiahbd",
+  displayName: "isaiah",
+  avatar: "f60eb94a10a34a6d68a7e6ffe139410a",
+  decoration: "a_33656b7ed12cde00c1826b654cf65590",
+};

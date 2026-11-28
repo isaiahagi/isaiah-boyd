@@ -1,6 +1,7 @@
 # isaiahboyd.xyz
 
-My personal site. Next.js (static export), React, TypeScript, Tailwind CSS, Motion, Lucide and Geist.
+My personal site. Next.js (static export), React, TypeScript and a little Tailwind CSS. Plain browser
+styles in Times New Roman. The Discord profile loads from [Lanyard](https://github.com/Phineas/lanyard).
 
 ## Develop
 
@@ -20,7 +21,7 @@ Everything on the home page is in [`lib/content.ts`](lib/content.ts).
 
 ```
 app/          layout, home page, 404, share image, global styles
-components/   header, section, list, copy button and other small pieces
+components/   Discord profile
 lib/          page content
 public/       images, and the Learn AI guide in public/learnai (plain HTML)
 worker.js     visitor counter, benchmarks API and the learnai subdomain

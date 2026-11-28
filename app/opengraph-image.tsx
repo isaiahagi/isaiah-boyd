@@ -17,17 +17,17 @@ export default function Image() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 88,
-          background: "#0b0b0b",
-          color: "#ededeb",
+          background: "#ffffff",
+          color: "#000000",
         }}
       >
-        <div style={{ display: "flex", fontSize: 28, color: "#86867f" }}>isaiahboyd.xyz</div>
+        <div style={{ display: "flex", fontSize: 28, color: "#444444" }}>isaiahboyd.xyz</div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 112, letterSpacing: -5 }}>{site.name}</div>
-          <div style={{ display: "flex", fontSize: 36, color: "#a6a6a2", marginTop: 20 }}>{site.role}</div>
+          <div style={{ display: "flex", fontSize: 112 }}>{site.name}</div>
+          <div style={{ display: "flex", fontSize: 36, color: "#444444", marginTop: 20 }}>{site.role}</div>
         </div>
         <div
-          style={{ display: "flex", borderTop: "1px solid #242423", paddingTop: 32, fontSize: 28, color: "#86867f" }}
+          style={{ display: "flex", borderTop: "1px solid #cccccc", paddingTop: 32, fontSize: 28, color: "#444444" }}
         >
           {site.location}
         </div>

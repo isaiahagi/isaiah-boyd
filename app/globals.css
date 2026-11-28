@@ -1,105 +1,20 @@
-@import "tailwindcss";
+/* no preflight: browser defaults do the styling, same as a plain HTML page */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
-@theme inline {
-  --color-bg: var(--bg);
-  --color-fg: var(--fg);
-  --color-muted: var(--muted);
-  --color-faint: var(--faint);
-  --color-line: var(--line);
-  --color-wash: var(--wash);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-}
-
-/* One neutral ramp. Follows the system unless the visitor picks a theme. */
 :root {
   color-scheme: light dark;
-  --bg: light-dark(#f6f6f4, #0b0b0b);
-  --fg: light-dark(#111111, #ededeb);
-  --muted: light-dark(#50504d, #a6a6a2);
-  --faint: light-dark(#686864, #86867f);
-  --line: light-dark(#dcdcd8, #242423);
-  --wash: light-dark(#ececea, #151515);
-}
-:root[data-theme="light"] { color-scheme: light; }
-:root[data-theme="dark"] { color-scheme: dark; }
-
-@layer base {
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-  }
-  ::selection { background: var(--fg); color: var(--bg); }
-  :focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; }
-  h1, h2, h3 { text-wrap: balance; }
-  p { text-wrap: pretty; }
 }
 
-/* film grain over the whole page */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  pointer-events: none;
-  opacity: 0.055;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+body {
+  max-width: 650px;
+  margin: 50px auto;
+  padding: 0 16px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 16px;
+  line-height: 1.4;
 }
 
-@utility shell {
-  width: 100%;
-  max-width: 57rem;
-  margin-inline: auto;
-  padding-left: max(1.25rem, env(safe-area-inset-left));
-  padding-right: max(1.25rem, env(safe-area-inset-right));
-}
-
-@utility label {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-
-/* underline that redraws from the left when the link is hovered or focused */
-.link-line {
-  background-image: linear-gradient(currentColor, currentColor), linear-gradient(var(--line), var(--line));
-  background-size: 0% 1px, 100% 1px;
-  background-position: 0 100%, 0 100%;
-  background-repeat: no-repeat;
-  padding-bottom: 1px;
-  transition: background-size 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.link-line:hover,
-a:hover > .link-line,
-a:focus-visible > .link-line { background-size: 100% 1px, 100% 1px; }
-
-/* shows the icon for the theme you would switch to */
-.theme-toggle .icon-sun { display: none; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
-  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
-}
-:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-
-/* one quiet entrance for the introduction; CSS only, so content never depends on JS */
-@keyframes rise {
-  from { opacity: 0; transform: translateY(8px); }
-}
-.rise { animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-}
-
-@media print {
-  body::after, body > header { display: none; }
+li {
+  margin-bottom: 2px;
 }
